@@ -57,3 +57,7 @@ void Init_Ech(){
 	Ech.taille = 0;
 	Ajouter_Ech(e);
 }
+
+int main(){
+	return 0;
+}

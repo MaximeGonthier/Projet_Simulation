@@ -1,0 +1,5 @@
+echo "Compilation"
+gcc simulation.c -lm
+echo "execution"
+./a.out 
+rm -f a.out
