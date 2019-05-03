@@ -61,3 +61,22 @@ void Init_Ech(){
 int main(){
 	return 0;
 }
+
+/**
+ * MODELE 1:
+ * 
+ * VARIABLES : 
+ * 	-T le temps de simul
+ * 	-NB_CLIENT
+ * 	-T_ATTENTE
+ * EVENEMENTS :
+ * 	-ARRIVE_CLIENT
+ * 	-SERVICE[N]
+ * 	-FIN_SERVICE[N]
+ * 
+ * en td on avait un service par serveur, mais la y'en a 10 du coup je 
+ * sais pas si ca fait pas un peu too much
+ * Pour moi on a pas besoin de tenir compte des numero donnés par le patron
+ * dans ce modèle puisque qu'on a juste une file avec plusieur serveurs
+ * et un client en début de file a forcément le plus petit numéro
+ * /
