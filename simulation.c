@@ -6,11 +6,11 @@
 #include <math.h>
 //-lm pour compiler
 #define Lambda 9
-#define Mu 10
+#define Mu 1
 
 #define EPSILON 1e-5
-#define MAXEVENT 100	//taille max de l'echeancier
-#define MAXTEMPS 1000	//cond d'arret
+#define MAXEVENT 1000000	//taille max de l'echeancier
+#define MAXTEMPS 10000	//cond d'arret
 
 double temps = 0;
 long int n = 0;		//nb de clients dans la file a l'instant temps
@@ -98,7 +98,7 @@ int condition_arret(long double Old, long double New){
 /**
  * Modele 1
  *
-*/
+
 #define N 10
 
 void Arrivee_Client(event e){
@@ -111,7 +111,7 @@ void Arrivee_Client(event e){
 
 	Ajouter_Ech(e1);
 
-	if(n<N){
+	if(n<=N){
 		event e2;
 		e2.type = 1; //service
 		e2.date = e.date + Exponnentielle(Mu);
@@ -124,9 +124,9 @@ void Arrivee_Client(event e){
 }
 
 void service_event(event e){
-	if (n > N){
+	if (n > 0){
 		n--;
-		if(n > 0){
+		if(n >= N){
 			event e2;
 			e2.type = 1; //service
 			e2.date = e.date + Exponnentielle(Mu);
@@ -168,14 +168,14 @@ void Modele_MMM(FILE* f1){
 	}	
 	printf("N moyen : %Lf\n", Nmoyen);
 }
-
+*/
 /***************************************************************************************************************************************************************************************************/
 /**
  * Modele 2
- *
+ */
 void Arrivee_Client(event e){
-	n++; //+1 client dans la file
-
+	//n++; //+1 client dans la file
+	double alea = (double)random()/RAND_MAX;	//entre 0 et 1
 	event e1;
 	e1.type  = 0; //arrivée client
 	e1.date = e.date + Exponnentielle(Lambda);
@@ -183,14 +183,15 @@ void Arrivee_Client(event e){
 
 	Ajouter_Ech(e1);
 
-	if(n==1){
-		event e2;
-		e2.type = 1; //service
-		e2.date = e.date + Exponnentielle(Mu);
-		e2.etat = 0; //non traité
-		Ajouter_Ech(e2);
-			
-	
+	if(alea < 0.1){
+		if(n==1){
+			event e2;
+			e2.type = 1; //service
+			e2.date = e.date + Exponnentielle(Mu);
+			e2.etat = 0; //non traité
+			Ajouter_Ech(e2);
+		}
+		n++;
 	}
 	temps = e.date;
 }
@@ -215,7 +216,6 @@ void Modele_MM1_1(FILE* f1){
 	long double Nmoyen;
 	Init_Ech();
 	event e;
-	double alea = (double)random()/RAND_MAX;	//entre 0 et 1
 
 	while(condition_arret(OldNmoyen, Nmoyen) == 0){
 		e = extraire();
@@ -223,7 +223,8 @@ void Modele_MM1_1(FILE* f1){
 
 		OldNmoyen = Nmoyen;
 		Nmoyen = cumule/temps;
-
+	
+		
 		if(temps == 0){
 			fprintf(f1,"0 \t 0 \n");
 		}
@@ -233,8 +234,7 @@ void Modele_MM1_1(FILE* f1){
 		}
 
 		if(e.type == 0){
-			if(alea < 0.1)
-				Arrivee_Client(e);
+			Arrivee_Client(e);
 		}
 		if (e.type == 1) {
 			service_event(e);
@@ -242,19 +242,19 @@ void Modele_MM1_1(FILE* f1){
 	}	
 	printf("N moyen : %Lf\n", Nmoyen);
 }
-*/
+
 /***************************************************************************************************************************************************************************************************/
 
 int main(){
 	srandom(getpid() + time(NULL));
 
-	FILE *f1 = fopen("MODELE1.data", "w");
+	/*FILE *f1 = fopen("MODELE1.data", "w");
 	Modele_MMM(f1);
-	fclose(f1);
+	fclose(f1);*/
 
-	/*FILE *f2 = fopen("MODELE2.data","w");
+	FILE *f2 = fopen("MODELE2.data","w");
 	Modele_MM1_1(f2);
-	fclose(f2);*/
+	fclose(f2);
 	
 
 	return 0;
