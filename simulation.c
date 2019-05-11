@@ -5,12 +5,13 @@
 #include <time.h>
 #include <math.h>
 //-lm pour compiler
-#define Lambda 9
+//#define Lambda 9
 #define Mu 1
 
 #define EPSILON 1e-5
 #define MAXEVENT 1000000	//taille max de l'echeancier
 #define MAXTEMPS 10000	//cond d'arret
+//Maxteemps devrait correspondre a 1h d'apres l'énoncé
 
 double temps = 0;
 long int n = 0;		//nb de clients dans la file a l'instant temps
@@ -101,7 +102,7 @@ int condition_arret(long double Old, long double New){
 
 #define N 10
 
-void Arrivee_Client(event e){
+void Arrivee_Client(event e, int Lambda){
 	n++; //+1 client dans la file
 
 	event e1;
@@ -138,7 +139,7 @@ void service_event(event e){
 	
 }
 	
-void Modele_MMM(FILE* f1){
+void Modele_MMM(FILE* f1, int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -160,7 +161,7 @@ void Modele_MMM(FILE* f1){
 		}
 
 		if(e.type == 0){
-			Arrivee_Client(e);
+			Arrivee_Client(e,Lambda);
 		}
 		if (e.type == 1) {
 			service_event(e);
@@ -173,7 +174,7 @@ void Modele_MMM(FILE* f1){
 /**
  * Modele 2
  */
-void Arrivee_Client(event e){
+void Arrivee_Client(event e, int Lambda){
 	//n++; //+1 client dans la file
 	double alea = (double)random()/RAND_MAX;	//entre 0 et 1
 	event e1;
@@ -211,7 +212,7 @@ void service_event(event e){
 	
 }
 	
-void Modele_MM1_1(FILE* f1){
+void Modele_MM1_1(FILE* f1, int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -234,28 +235,42 @@ void Modele_MM1_1(FILE* f1){
 		}
 
 		if(e.type == 0){
-			Arrivee_Client(e);
+			Arrivee_Client(e,Lambda);
 		}
 		if (e.type == 1) {
 			service_event(e);
 		}
 	}	
 	printf("N moyen : %Lf\n", Nmoyen);
+	FILE *fresult2 = fopen("Result_modele2.txt","a");
+	fprintf(fresult2,"%d \t %Lf \n",Lambda,Nmoyen);
+	fclose(fresult2);
 }
 
 /***************************************************************************************************************************************************************************************************/
 
-int main(){
+int main(int argc, char **argv){
+
+
 	srandom(getpid() + time(NULL));
+	FILE *f = fopen(argv[1],"r");
+	int Lambda;
+	
+
+	for(int i = 0; i < 9; i++)
+	{
+		fscanf(f,"%d",&Lambda);
+		FILE *f2 = fopen("MODELE2.data","w");
+		Modele_MM1_1(f2, Lambda);
+		fclose(f2);
+		
+	}
+	fclose(f);
+	
 
 	/*FILE *f1 = fopen("MODELE1.data", "w");
-	Modele_MMM(f1);
+	Modele_MMM(f1,Lambda);
 	fclose(f1);*/
-
-	FILE *f2 = fopen("MODELE2.data","w");
-	Modele_MM1_1(f2);
-	fclose(f2);
-	
 
 	return 0;
 }
