@@ -263,6 +263,11 @@ int main(int argc, char **argv){
 		FILE *f2 = fopen("MODELE2.data","w");
 		Modele_MM1_1(f2, Lambda);
 		fclose(f2);
+		temps = 0;
+		n = 0;		//nb de clients dans la file a l'instant temps
+		compteur = 0;	//cond d'arret 2
+		cumule = 0;
+		sleep(1);
 		
 	}
 	fclose(f);
