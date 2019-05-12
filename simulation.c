@@ -95,6 +95,13 @@ int condition_arret(long double Old, long double New){
 	return 0;
 }
 
+int Moyenne(int serveur, event e, int Nmoyen, int Nentree){
+	if(n > serveur){
+		cumule += (e.date - temps) * n - serveur;
+		Nmoyen = cumule/Nentree;
+	}
+}
+
 /***************************************************************************************************************************************************************************************************/
 /**
  * Modele 1
@@ -225,7 +232,7 @@ void Modele_MM1_1(FILE* f1, int Lambda){
 
 		OldNmoyen = Nmoyen;
 		Nmoyen = cumule/temps;
-	
+		
 		
 		if(temps == 0){
 			fprintf(f1,"0 \t 0 \n");
