@@ -1,7 +1,7 @@
 echo "Compilation"
 gcc simulation.c -lm
 echo "execution"
-./a.out 
+./a.out lambda.txt
 #echo "Compilation R"
 #R CMD BATCH "Draw.R"
 #echo "affichage"

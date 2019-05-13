@@ -17,6 +17,7 @@ double temps = 0;
 long int n = 0;		//nb de clients dans la file a l'instant temps
 int compteur = 0;	//cond d'arret 2
 double cumule = 0;
+int Nentree = 0;
 
 typedef struct Event {
 	int type; //0 pour arrive 1 pour sortie
@@ -95,17 +96,21 @@ int condition_arret(long double Old, long double New){
 	return 0;
 }
 
-int Moyenne(int serveur, event e, int Nmoyen, int Nentree){
+
+// if(n>N)Tcumule += (e.date-temps)*(n-N); Tmoyen = Tcumule/Nentree
+int Moyenne(int serveur, event e, int Nentree){
+	int Tmoyen;
 	if(n > serveur){
 		cumule += (e.date - temps) * n - serveur;
-		Nmoyen = cumule/Nentree;
+		Tmoyen = cumule/Nentree;
 	}
+	return Tmoyen;
 }
 
 /***************************************************************************************************************************************************************************************************/
 /**
  * Modele 1
- *
+ */
 
 #define N 10
 
@@ -180,8 +185,7 @@ void Modele_MMM(FILE* f1, int Lambda){
 /***************************************************************************************************************************************************************************************************/
 /**
  * Modele 2
-<<<<<<< HEAD
- */
+ *
 void Arrivee_Client(event e, int Lambda){
 	//n++; //+1 client dans la file
 	double alea = (double)random()/RAND_MAX;	//entre 0 et 1
@@ -201,6 +205,7 @@ void Arrivee_Client(event e, int Lambda){
 			Ajouter_Ech(e2);
 		}
 		n++;
+		Nentree ++;
 	}
 	temps = e.date;
 }
@@ -238,7 +243,7 @@ void Modele_MM1_1(FILE* f1, int Lambda){
 			fprintf(f1,"0 \t 0 \n");
 		}
 		else{
-			printf("temps = %f et N = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
+			printf("temps = %f et n = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
 			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
 		}
 
@@ -264,7 +269,7 @@ int main(int argc, char **argv){
 	int Lambda;
 	
 
-	for(int i = 0; i < 9; i++)
+	/*for(int i = 0; i < 9; i++)
 	{
 		fscanf(f,"%d",&Lambda);
 		FILE *f2 = fopen("MODELE2.data","w");
@@ -274,15 +279,28 @@ int main(int argc, char **argv){
 		n = 0;		//nb de clients dans la file a l'instant temps
 		compteur = 0;	//cond d'arret 2
 		cumule = 0;
+		Nentree = 0;
+		sleep(1);
+		
+	}
+	fclose(f);*/
+	
+	for(int i = 0; i < 9; i++)
+	{
+		fscanf(f,"%d",&Lambda);
+		FILE *f1 = fopen("MODELE1.data","w");
+		Modele_MMM(f1, Lambda);
+		fclose(f1);
+		temps = 0;
+		n = 0;		//nb de clients dans la file a l'instant temps
+		compteur = 0;	//cond d'arret 2
+		cumule = 0;
+		Nentree = 0;
 		sleep(1);
 		
 	}
 	fclose(f);
-	
-
-	/*FILE *f1 = fopen("MODELE1.data", "w");
-	Modele_MMM(f1,Lambda);
-	fclose(f1);*/
 
 	return 0;
 }
+
