@@ -9,7 +9,7 @@
 #define Mu 1
 
 #define EPSILON 1e-5
-#define MAXEVENT 1000000	//taille max de l'echeancier
+#define MAXEVENT 100000	//taille max de l'echeancier
 #define MAXTEMPS 10000	//cond d'arret
 //Maxteemps devrait correspondre a 1h d'apres l'énoncé
 
@@ -98,13 +98,13 @@ int condition_arret(long double Old, long double New){
 
 
 // if(n>N)Tcumule += (e.date-temps)*(n-N); Tmoyen = Tcumule/Nentree
-int Moyenne(int serveur, event e, int Nentree){
-	int Tmoyen;
+double Tmoyen = 0;
+void Moyenne(int serveur, event e, int Lambda){
 	if(n > serveur){
 		cumule += (e.date - temps) * n - serveur;
-		Tmoyen = cumule/Nentree;
+		Tmoyen =(double) cumule/Nentree;
 	}
-	return Tmoyen;
+	printf("lambda = %d, serveur = %d, n = %ld, Nentree = %d, cumule = %f, temps = %f, Tmoyen = %f\n",Lambda, serveur, n, Nentree, cumule, temps, Tmoyen);
 }
 
 /***************************************************************************************************************************************************************************************************/
@@ -116,6 +116,7 @@ int Moyenne(int serveur, event e, int Nentree){
 
 void Arrivee_Client(event e, int Lambda){
 	n++; //+1 client dans la file
+	Nentree ++;
 
 	event e1;
 	e1.type  = 0; //arrivée client
@@ -130,10 +131,9 @@ void Arrivee_Client(event e, int Lambda){
 		e2.date = e.date + Exponnentielle(Mu);
 		e2.etat = 0; //non traité
 		Ajouter_Ech(e2);
-			
-	
 	}
 	temps = e.date;
+	Moyenne(10,e, Lambda);
 }
 
 void service_event(event e){
@@ -168,7 +168,7 @@ void Modele_MMM(FILE* f1, int Lambda){
 			fprintf(f1,"0 \t 0 \n");
 		}
 		else{
-			printf("temps = %f et N = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
+			//printf("temps = %f et N = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
 			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
 		}
 
@@ -206,6 +206,7 @@ void Arrivee_Client(event e, int Lambda){
 		}
 		n++;
 		Nentree ++;
+		Moyenne(1,e);
 	}
 	temps = e.date;
 }
@@ -243,7 +244,7 @@ void Modele_MM1_1(FILE* f1, int Lambda){
 			fprintf(f1,"0 \t 0 \n");
 		}
 		else{
-			printf("temps = %f et n = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
+			//printf("temps = %f et n = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
 			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
 		}
 
@@ -280,7 +281,7 @@ int main(int argc, char **argv){
 		compteur = 0;	//cond d'arret 2
 		cumule = 0;
 		Nentree = 0;
-		sleep(1);
+		sleep(2);
 		
 	}
 	fclose(f);*/
@@ -296,7 +297,7 @@ int main(int argc, char **argv){
 		compteur = 0;	//cond d'arret 2
 		cumule = 0;
 		Nentree = 0;
-		sleep(1);
+		sleep(2);
 		
 	}
 	fclose(f);
