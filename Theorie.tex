@@ -33,11 +33,11 @@
 			Dès qu'un ordinateur se libère, la personne en attente avec le plus petit numéro de ticket accède à l'ordinateur.}
 		\subsubsection{représentation}
 		\centerline{\includegraphics[scale=0.5]{MMN.png}}
-		Modélisation graphique de la file.\\
+		Modélisation graphique de la file M/M/N.\\
 		Dans l'état i il y à i clients dans la file.\\
 		L'espace d'état est défini par $E=\pmb{\mathbb{N}}$\\
 		Les transitions peuvent s'exprimer de la façon suivante :\\
-		$\bigvee i \ge 0,$\\
+		$\forall i \ge 0,$\\
 		$i^{\lambda} \to i + 1 $\\
 		$i^{\mu} \to i - 1$\\
 		\\
@@ -73,6 +73,37 @@
 	\textit{Le patron choisit au hasard, uniformément un ordinateur parmis les N puis il donne au client un ticket numéroté pour l'ordinateur choisi.\\
 			Dès que le client d'un ordinateur a fini, c'est le client qui a le plus petit numéro parmis ceux affecté à cet ordinateur qui prend la place.}
 	\subsubsection{représentation}
+	\centerline{\includegraphics[scale=0.5]{MM1.png}}
+	Modélisation graphique de la file M/M/1.\\
+	Les transitions peuvent s'exprimer de la façon suivante :\\
+		\begin{tabular}{ | c | c | c | c |}
+		\hline
+		\ & 0          & 1                 & 2\\			
+		0 & $-\lambda$ & $\lambda$         & 0\\
+		1 & $\mu$      & $-(\lambda + \mu)$& $\lambda$\\
+		2 & 0          & $\mu$             &  $-(\lambda + \mu)$\\
+		\hline  
+		\end{tabular}\\
+		$\forall i \epsilon \pmb{\mathbb{N}},$\\
+		$Q_{i, i+1} = \lambda$\\
+		$Q_{i, i-1} = \mu$\\
+		La condition de convergence pour ce modèle est :\\
+		$\rho < 1$
 	\subsection{Données et Formules}
+	Pour ce modèles, on utilise les même données que pour le modèles précédent soit :\\
+	$\lambda$ : probabilité d'arrivée de client.\\
+	$\mu$ : le temps de service.\\
+	$\rho$ : l'intensité du trafic.\\
+	\\
+	Cependant on calcule $\rho$ différemment :\\
+	$\rho = \frac{\lambda}{\mu}$\\
+	\\
+	Le nombre moyen de client s'exprime ainsi:\\
+	$Nmoyen = \frac{\rho}{1-\rho}$
 		\subsubsection{Temps moyen d'attente et 90 percentile}
+		Le temps d'attente moyen est :\\
+		$E[A] = \rho * \frac{\frac{1}{\mu}}{1-\rho}$
+		\\
+		Le 90 percentile du temps d'attente s'exprime donc de la façon suivante :\\
+		$max(0,\frac{E[A]}{\rho}ln(10*\rho))$
 \end{document}
