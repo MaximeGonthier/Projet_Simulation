@@ -1,0 +1,12 @@
+\babel@toc {french}{}
+\contentsline {section}{\numberline {1}Introduction}{}
+\contentsline {section}{\numberline {2}Mod\IeC {\`e}les n\IeC {\textdegree }1 - File M/M/N}{}
+\contentsline {subsection}{\numberline {2.1}description du mod\IeC {\`e}le}{}
+\contentsline {subsubsection}{\numberline {2.1.1}repr\IeC {\'e}sentation}{}
+\contentsline {subsection}{\numberline {2.2}Donn\IeC {\'e}es et Formules}{}
+\contentsline {subsubsection}{\numberline {2.2.1}Temps moyen d'attente et 90 percentile}{}
+\contentsline {section}{\numberline {3}Mod\IeC {\`e}le n\IeC {\textdegree }2 - File M/M/1}{}
+\contentsline {subsection}{\numberline {3.1}description du mod\IeC {\`e}le}{}
+\contentsline {subsubsection}{\numberline {3.1.1}repr\IeC {\'e}sentation}{}
+\contentsline {subsection}{\numberline {3.2}Donn\IeC {\'e}es et Formules}{}
+\contentsline {subsubsection}{\numberline {3.2.1}Temps moyen d'attente et 90 percentile}{}

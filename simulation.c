@@ -12,28 +12,35 @@
 #define MAXEVENT 100000	//taille max de l'echeancier
 #define MAXTEMPS 10000	//cond d'arret
 #define N 10//nombre de serveurs
-//Maxteemps devrait correspondre a 1h d'apres l'énoncé
+//Maxtemps devrait correspondre a 1h d'apres l'énoncé
 
 double temps = 0;
 long int n = 0;		//nb de clients dans la file a l'instant temps
 int compteur = 0;	//cond d'arret 2
 double cumule = 0;
 int Nentree = 0;
-double Moy = 0.0;
+double Moy = 0;
+double Tmoyen = 0;
 
+void init_global(){
+	temps = 0;
+	n = 0;
+	compteur = 0;
+	cumule = 0;
+	Nentree = 0;
+	Moy = 0;
+	Tmoyen = 0;
+}
 typedef struct Event {
 	int type; //0 pour arrive 1 pour sortie
 	double date;
 	int etat; //0 pour non traité 1 pour non traité
 }event;
-
 typedef struct Echeancier {
 	event tab[MAXEVENT];
 	int taille;
 }echeancier;
-
 echeancier Ech;
-
 double Exponnentielle(int lbda) {
 	double r = (double)random()/RAND_MAX;	//entre 0 et 1
 	
@@ -42,8 +49,6 @@ double Exponnentielle(int lbda) {
 	}
 	return -log(r)/(lbda*1.0); // - log(u)/lamda, avec U = unif(0,1)
 }
-
-
 void Ajouter_Ech(event e) {
 	if(Ech.taille < MAXEVENT) {
 		Ech.tab[Ech.taille] = e;
@@ -52,7 +57,6 @@ void Ajouter_Ech(event e) {
 	}
 	//else (printf("echeancier PLEIN"));
 }
-
 void Init_Ech(){
 	event e;
 	e.type = 0;
@@ -61,7 +65,6 @@ void Init_Ech(){
 	Ech.taille = 0;
 	Ajouter_Ech(e);
 }
-
 event extraire(){//extrait l'event le plus ancien non traité
 	int i, imin;
 	event min;
@@ -88,7 +91,6 @@ event extraire(){//extrait l'event le plus ancien non traité
 	Ech.tab[imin].etat = 1;
 	return min;
 }
-
 int condition_arret(long double Old, long double New){
 	if(fabs(Old-New) < EPSILON && temps > 1000){
 		compteur ++;
@@ -97,31 +99,17 @@ int condition_arret(long double Old, long double New){
 	}
 	return 0;
 }
-
-
 // if(n>N)Tcumule += (e.date-temps)*(n-N); Tmoyen = Tcumule/Nentree
-double Tmoyen = 0;
 double Moyenne(int serveur, event e){
 	if(n > serveur){
-		cumule += (e.date - temps) * n - serveur;
+		cumule += (e.date - temps) * (n - serveur);
 		Tmoyen =(double) cumule/Nentree;
 	}
 	//printf("serveur = %d, n = %ld, Nentree = %d, cumule = %f, temps = %f, Tmoyen = %f\n",serveur, n, Nentree, cumule, temps, Tmoyen);
 	return Tmoyen;
-	
 }
 
-/***************************************************************************************************************************************************************************************************/
-/**
- * Modele 1
- */
-
-
-
-void Arrivee_ClientM1(event e, int Lambda){
-	n++; //+1 client dans la file
-	Nentree ++;
-
+void Arrivee_Client(event e, int Lambda, int mod){
 	event e1;
 	e1.type  = 0; //arrivée client
 	e1.date = e.date + Exponnentielle(Lambda);
@@ -129,33 +117,63 @@ void Arrivee_ClientM1(event e, int Lambda){
 
 	Ajouter_Ech(e1);
 
-	if(n<=N){
-		event e2;
-		e2.type = 1; //service
-		e2.date = e.date + Exponnentielle(Mu);
-		e2.etat = 0; //non traité
-		Ajouter_Ech(e2);
+	if(mod == 2){
+		double alea = (double)random()/RAND_MAX;	//entre 0 et 1
+		if(alea < 0.1){
+			if(n==1){
+				event e2;
+				e2.type = 1; //service
+				e2.date = e.date + Exponnentielle(Mu);
+				e2.etat = 0; //non traité
+				Ajouter_Ech(e2);
+			}
+			n++;
+			Nentree ++;
+		}
+		temps = e.date;
 	}
-	temps = e.date;
-	Moy = Moyenne(10,e);
-}
-
-void service_eventM1(event e){
-	if (n > 0){
-		n--;
-		if(n >= N){
+	else if(mod == 1){
+		n++; //+1 client dans la file
+		Nentree ++;
+		if(n<=N){
 			event e2;
 			e2.type = 1; //service
 			e2.date = e.date + Exponnentielle(Mu);
-			e2.etat = 0;
+			e2.etat = 0; //non traité
 			Ajouter_Ech(e2);
+		}
+		temps = e.date;
+	}
+}
+void service_event(event e, int mod){
+	if (n > 0){
+		n--;
+		if(mod == 2){
+			if(n > 0){
+				event e2;
+				e2.type = 1; //service
+				e2.date = e.date + Exponnentielle(Mu);
+				e2.etat = 0;
+				Ajouter_Ech(e2);
+			}
+		}
+		if(mod == 1){
+			if(n >= N){
+				event e2;
+				e2.type = 1; //service
+				e2.date = e.date + Exponnentielle(Mu);
+				e2.etat = 0;
+				Ajouter_Ech(e2);
+			}
 		}
 	}
 	temps = e.date;
-	
 }
-	
-void Modele_MMM(FILE* f1, int Lambda){
+/***************************************************************************************************************************************************************************************************/
+/**
+ * Modele 1
+ */
+void Modele_1(FILE* f1, int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -177,63 +195,23 @@ void Modele_MMM(FILE* f1, int Lambda){
 		}
 
 		if(e.type == 0){
-			Arrivee_ClientM1(e,Lambda);
+			Arrivee_Client(e,Lambda,1);
 		}
 		if (e.type == 1) {
-			service_eventM1(e);
+			service_event(e,1);
 		}
+		Moy= Moyenne(10,e);
 	}	
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f\n",Lambda, Nmoyen, Moy);
 	FILE *fresult1 = fopen("Result_modele1.txt","a");
 	fprintf(fresult1,"%d \t %Lf \n",Lambda,Nmoyen);
 	fclose(fresult1);
 }
-
 /***************************************************************************************************************************************************************************************************/
 /**
  * Modele 2
  */
-void Arrivee_ClientM2(event e, int Lambda){
-	//n++; //+1 client dans la file
-	double alea = (double)random()/RAND_MAX;	//entre 0 et 1
-	event e1;
-	e1.type  = 0; //arrivée client
-	e1.date = e.date + Exponnentielle(Lambda);
-	e1.etat = 0; //non traité 
-
-	Ajouter_Ech(e1);
-
-	if(alea < 0.1){
-		if(n==1){
-			event e2;
-			e2.type = 1; //service
-			e2.date = e.date + Exponnentielle(Mu);
-			e2.etat = 0; //non traité
-			Ajouter_Ech(e2);
-		}
-		n++;
-		Nentree ++;
-		Moy = Moyenne(1,e);
-	}
-	temps = e.date;
-}
-
-void service_eventM2(event e){
-	if (n > 0){
-		n--;
-		if(n > 0){
-			event e2;
-			e2.type = 1; //service
-			e2.date = e.date + Exponnentielle(Mu);
-			e2.etat = 0;
-			Ajouter_Ech(e2);
-		}
-	}
-	temps = e.date;
-	
-}
-	
-void Modele_MM1_1(FILE* f1, int Lambda){
+void Modele_2(FILE* f1, int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -256,18 +234,18 @@ void Modele_MM1_1(FILE* f1, int Lambda){
 		}
 
 		if(e.type == 0){
-			Arrivee_ClientM2(e,Lambda);
+			Arrivee_Client(e,Lambda,2);
 		}
 		if (e.type == 1) {
-			service_eventM2(e);
+			service_event(e,2);
 		}
+		Moy= Moyenne(1,e);
 	}	
 	printf(" Lambda : %d N moyen : %Lf, T moyen : %f\n", Lambda, Nmoyen, Moy);
 	FILE *fresult2 = fopen("Result_modele2.txt","a");
 	fprintf(fresult2,"%d \t %Lf \n",Lambda,Nmoyen);
 	fclose(fresult2);
 }
-
 /***************************************************************************************************************************************************************************************************/
 
 int main(int argc, char **argv){
@@ -276,44 +254,24 @@ int main(int argc, char **argv){
 	FILE *f = fopen(argv[1],"r");
 	int Lambda;
 	
-	/*printf("MODELE 1\n");
-	for(int i = 0; i < 9; i++)
-	{	
-		fscanf(f,"%d",&Lambda);
-		FILE *f1 = fopen("MODELE1.data","w");
-		Modele_MMM(f1, Lambda);
-		fclose(f1);
-		temps = 0;
-		n = 0;		//nb de clients dans la file a l'instant temps
-		compteur = 0;	//cond d'arret 2
-		cumule = 0;
-		Nentree = 0;
-		Moy = 0;
-		//sleep(2);
-		
-	}
-	fclose(f);*/
-
-	printf("MODELE 2\n");
+	init_global();
 	for(int i = 0; i < 9; i++)
 	{
 		fscanf(f,"%d",&Lambda);
+		FILE *f1 = fopen("MODELE1.data","w");
 		FILE *f2 = fopen("MODELE2.data","w");
-		//Lambda = (double) Lambda / N;
-		Modele_MM1_1(f2, Lambda);
-		fclose(f2);
-		temps = 0;
-		n = 0;		//nb de clients dans la file a l'instant temps
-		compteur = 0;	//cond d'arret 2
-		cumule = 0;
-		Nentree = 0;
-		Moy = 0;
-		//sleep(2);
-		
+		//printf("Modèle 1 : \n");
+		Modele_1(f1, Lambda);
+		init_global();
+		//printf("Modèle 2 : \n");
+		Modele_2(f2, Lambda);
+		init_global();
+		fclose(f1);
+		fclose(f2);	
+		sleep(1);
 	}
 	fclose(f);
-	
-	
+
 	return 0;
 }
 
