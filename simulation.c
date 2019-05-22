@@ -204,7 +204,7 @@ void Modele_1(FILE* f1, int Lambda){
 	}	
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f\n",Lambda, Nmoyen, Moy);
 	FILE *fresult1 = fopen("Result_modele1.txt","a");
-	fprintf(fresult1,"%d \t %Lf \n",Lambda,Nmoyen);
+	fprintf(fresult1,"%d \t %Lf \n",Lambda,Moy);
 	fclose(fresult1);
 }
 /***************************************************************************************************************************************************************************************************/
@@ -243,7 +243,7 @@ void Modele_2(FILE* f1, int Lambda){
 	}	
 	printf(" Lambda : %d N moyen : %Lf, T moyen : %f\n", Lambda, Nmoyen, Moy);
 	FILE *fresult2 = fopen("Result_modele2.txt","a");
-	fprintf(fresult2,"%d \t %Lf \n",Lambda,Nmoyen);
+	fprintf(fresult2,"%d \t %Lf \n",Lambda,Moy);
 	fclose(fresult2);
 }
 /***************************************************************************************************************************************************************************************************/
