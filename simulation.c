@@ -20,6 +20,7 @@ int compteur = 0;	//cond d'arret 2
 double cumule = 0;
 int Nentree = 0;
 double Moy = 0;
+double Per = 0;
 double Tmoyen = 0;
 
 void init_global(){
@@ -109,6 +110,37 @@ double Moyenne(int serveur, event e){
 	return Tmoyen;
 }
 
+double* Percentile (double Tmoyen, double* Tabtemps){
+	if(Tmoyen > Tabtemps[8]){
+		//printf("supp\n");
+		if(Tmoyen > Tabtemps[9]){
+			Tabtemps[8] = Tabtemps[9];
+			Tabtemps[9] = Tmoyen;
+		}
+		else {
+			Tabtemps[8] = Tmoyen;
+			for(int i = 1; i < 9; i++){
+				Tabtemps[i-1] = Tabtemps[i];
+			}
+		}
+	}
+	else if (Tmoyen < Tabtemps[8]){
+		if (Tmoyen > Tabtemps[7]){
+			Tabtemps[8] = Tmoyen;
+			for(int i = 1; i < 9; i++){
+				Tabtemps[i-1] = Tabtemps[i];
+			}
+		}
+		else {
+			Tabtemps[8] = Tabtemps[7];
+			for(int i = 1; i < 8; i++){
+				Tabtemps[i-1] = Tabtemps[i];
+			}
+		}
+	}
+	return Tabtemps;
+}
+
 void Arrivee_Client(event e, int Lambda, int mod){
 	event e1;
 	e1.type  = 0; //arrivée client
@@ -179,6 +211,11 @@ void Modele_1(FILE* f1, int Lambda){
 	Init_Ech();
 	event e;
 
+	double* Tabpercentile = (double*)malloc(10*sizeof(double*));
+	for (int i = 0; i < 10; i++){
+		Tabpercentile[i] = 0;
+	}
+
 	while(condition_arret(OldNmoyen, Nmoyen) == 0){
 		e = extraire();
 		cumule += (e.date-temps)*n;
@@ -201,11 +238,14 @@ void Modele_1(FILE* f1, int Lambda){
 			service_event(e,1);
 		}
 		Moy= Moyenne(10,e);
+		Tabpercentile = Percentile(Moy,Tabpercentile);
+		//printf("tabperc : %f\n",Tabpercentile[8]);
 	}	
-	printf("Lambda : %d N moyen : %Lf  T moyen  : %f\n",Lambda, Nmoyen, Moy);
+	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile[8]);
 	FILE *fresult1 = fopen("Result_modele1.txt","a");
-	fprintf(fresult1,"%d \t %Lf \n",Lambda,Moy);
+	fprintf(fresult1,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile[8]);
 	fclose(fresult1);
+	free(Tabpercentile);
 }
 /***************************************************************************************************************************************************************************************************/
 /**
@@ -216,6 +256,11 @@ void Modele_2(FILE* f1, int Lambda){
 	long double Nmoyen;
 	Init_Ech();
 	event e;
+
+	double* Tabpercentile2 = (double*)malloc(10*sizeof(double*));
+	for (int i = 0; i < 10; i++){
+		Tabpercentile2[i] = 0;
+	}
 
 	while(condition_arret(OldNmoyen, Nmoyen) == 0){
 		e = extraire();
@@ -240,11 +285,13 @@ void Modele_2(FILE* f1, int Lambda){
 			service_event(e,2);
 		}
 		Moy= Moyenne(1,e);
+		Tabpercentile2 = Percentile(Moy,Tabpercentile2);
 	}	
-	printf(" Lambda : %d N moyen : %Lf, T moyen : %f\n", Lambda, Nmoyen, Moy);
+	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile2[8]);
 	FILE *fresult2 = fopen("Result_modele2.txt","a");
-	fprintf(fresult2,"%d \t %Lf \n",Lambda,Moy);
+	fprintf(fresult2,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile2[8]);
 	fclose(fresult2);
+	free(Tabpercentile2);
 }
 /***************************************************************************************************************************************************************************************************/
 
