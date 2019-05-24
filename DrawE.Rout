@@ -17,16 +17,16 @@ Tapez 'q()' pour quitter R.
 
 [Sauvegarde de la session précédente restaurée]
 
-> # pour executer le code : R CMD BATCH "Draw90.R"
+> # pour executer le code : R CMD BATCH "DrawE.R"
 > 
 > modelname = "Result_modele1.txt"
 > data = read.table(modelname)
 > attach(data);
 > 
 > Lambda = V1
-> E = V3
+> E = V2
 > 
-> plot(Lambda,E,type="l",xlab="Lambda",ylab="90 percentile",col="red")
+> plot(Lambda,E,type="l",xlab="Lambda",ylab="Temps moyen d'attente",col="red")
 > 
 > modelname = "Result_modele2.txt"
 > data = read.table(modelname)
@@ -37,10 +37,10 @@ The following objects are masked from data (pos = 3):
 
 > 
 > Lambda = V1
-> E = V3
+> E = V2
 > 
-> plot(Lambda,E,type="l",xlab="Lambda",ylab="90 percentile",col="red")
+> plot(Lambda,E,type="l",xlab="Lambda",ylab="E",col="red")
 > 
 > proc.time()
 utilisateur     système      écoulé 
-      0.186       0.018       0.176 
+      0.160       0.011       0.165 
