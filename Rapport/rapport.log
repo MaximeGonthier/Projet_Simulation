@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.9.4)  24 MAY 2019 16:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.9.4)  25 MAY 2019 11:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -782,8 +782,7 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
 \c@LT@tables=\count123
 \c@LT@chunks=\count124
 \LT@p@ftn=\toks34
-)
-No file rapport.aux.
+) (./rapport.aux)
 \openout1 = `rapport.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
@@ -800,6 +799,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
 LaTeX Font Info:    ... okay on input line 18.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 18.
+
 (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
@@ -923,28 +923,28 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-No file rapport.toc.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./rapport.toc)
 \tf@toc=\write3
 \openout3 = `rapport.toc'.
 
-[2] [3] (./rapport.aux) ) 
+ [2] [3] (./rapport.aux) ) 
 Here is how much of TeX's memory you used:
- 6769 strings out of 494829
- 93311 string characters out of 6178001
+ 6775 strings out of 494829
+ 93385 string characters out of 6178001
  149589 words of memory out of 5000000
- 9954 multiletter control sequences out of 15000+600000
- 31970 words of font info for 37 fonts, out of 8000000 for 9000
+ 9955 multiletter control sequences out of 15000+600000
+ 34965 words of font info for 38 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  41i,6n,32p,274b,423s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/s
-hare/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/publi
-c/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/te
-xmf/fonts/type1/public/lm/lmr17.pfb>
-Output written on rapport.pdf (3 pages, 101481 bytes).
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/
+share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/publ
+ic/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/
+texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/l
+mr17.pfb>
+Output written on rapport.pdf (3 pages, 126783 bytes).
 PDF statistics:
- 31 PDF objects out of 1000 (max. 8388607)
- 21 compressed objects within 1 object stream
+ 35 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

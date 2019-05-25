@@ -22,6 +22,8 @@ int Nentree = 0;
 double Moy = 0;
 double Per = 0;
 double Tmoyen = 0;
+double* Tabmodele3;
+int indicemin = 0;
 
 void init_global(){
 	temps = 0;
@@ -31,6 +33,12 @@ void init_global(){
 	Nentree = 0;
 	Moy = 0;
 	Tmoyen = 0;
+	Tabmodele3 = (double*)malloc(10*sizeof(double*));
+	for (int i = 0; i < 10; i++){
+		Tabmodele3[i] = 0;
+	}
+	indicemin = 0;
+
 }
 typedef struct Event {
 	int type; //0 pour arrive 1 pour sortie
@@ -140,12 +148,14 @@ double* Percentile (double Tmoyen, double* Tabtemps){
 	}
 	return Tabtemps;
 }
-
 void Arrivee_Client(event e, int Lambda, int mod){
 	event e1;
 	e1.type  = 0; //arrivée client
 	e1.date = e.date + Exponnentielle(Lambda);
 	e1.etat = 0; //non traité 
+
+	//modèle 3
+	int min = 0;
 
 	Ajouter_Ech(e1);
 
@@ -176,6 +186,21 @@ void Arrivee_Client(event e, int Lambda, int mod){
 		}
 		temps = e.date;
 	}
+	else if(mod == 3){
+		n++;
+		Nentree ++;
+		min = Tabmodele3[0];
+			indicemin = 0;
+			for (int i = 0; i < 10; i++)
+			{
+				if(min > Tabmodele3[i])
+				{
+					min = Tabmodele3[i];
+					indicemin = i;
+				}
+			}
+			Tabmodele3[indicemin]++;
+	}
 }
 void service_event(event e, int mod){
 	if (n > 0){
@@ -196,6 +221,16 @@ void service_event(event e, int mod){
 				e2.date = e.date + Exponnentielle(Mu);
 				e2.etat = 0;
 				Ajouter_Ech(e2);
+			}
+		}
+		if(mod == 3){
+			if(Tabmodele3[indicemin] == 1){
+				event e2;
+				e2.type = 1;
+				e2.date = e.date + Exponnentielle(Mu);
+				e2.etat = 0;
+				Ajouter_Ech(e2);
+				Tabmodele3[indicemin]--;
 			}
 		}
 	}
@@ -295,6 +330,54 @@ void Modele_2(FILE* f1, int Lambda){
 }
 /***************************************************************************************************************************************************************************************************/
 
+/***************************************************************************************************************************************************************************************************/
+/**
+ * Modele 3
+ */
+void Modele_3(FILE* f1, int Lambda){
+	long double OldNmoyen;
+	long double Nmoyen;
+	Init_Ech();
+	event e;
+
+	double* Tabpercentile3 = (double*)malloc(10*sizeof(double*));
+	for (int i = 0; i < 10; i++){
+		Tabpercentile3[i] = 0;
+	}
+
+	while(condition_arret(OldNmoyen, Nmoyen) == 0){
+		e = extraire();
+		cumule += (e.date-temps)*n;
+
+		OldNmoyen = Nmoyen;
+		Nmoyen = cumule/temps;
+		
+		
+		if(temps == 0){
+			fprintf(f1,"0 \t 0 \n");
+		}
+		else{
+			//printf("temps = %f et n = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
+			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
+		}
+
+		if(e.type == 0){
+			Arrivee_Client(e,Lambda,3);
+		}
+		if ((e.type == 1)) {
+			service_event(e,3);
+		}
+		Moy= Moyenne(1,e);
+		Tabpercentile3 = Percentile(Moy,Tabpercentile3);
+	}	
+	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile3[8]);
+	FILE *fresult3 = fopen("Result_modele3.txt","a");
+	fprintf(fresult3,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile3[8]);
+	fclose(fresult3);
+	free(Tabpercentile3);
+}
+/***************************************************************************************************************************************************************************************************/
+
 int main(int argc, char **argv){
 
 	srandom(getpid() + time(NULL));
@@ -312,15 +395,24 @@ int main(int argc, char **argv){
 		fscanf(f,"%d",&Lambda);
 		FILE *f1 = fopen("MODELE1.data","w");
 		FILE *f2 = fopen("MODELE2.data","w");
+		//FILE *f3 = fopen("MODELE3.data","w");
 		//printf("Modèle 1 : \n");
 		Modele_1(f1, Lambda);
 		init_global();
 		//printf("Modèle 2 : \n");
 		Modele_2(f2, Lambda);
 		init_global();
-		//fclose(f1);
-		//fclose(f2);	
-		//sleep(1);
+
+
+		/*Modele_3(f3, Lambda);
+		init_global();*/
+
+		fclose(f1);
+		fclose(f2);	
+
+		//fclose(f3);
+
+		sleep(1);
 	}
 	fclose(f);
 
