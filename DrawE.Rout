@@ -1,6 +1,6 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R est un logiciel libre livré sans AUCUNE GARANTIE.
@@ -19,28 +19,19 @@ Tapez 'q()' pour quitter R.
 
 > # pour executer le code : R CMD BATCH "DrawE.R"
 > 
-> modelname = "Result_modele1.txt"
+> modelname = "resultE.txt"
 > data = read.table(modelname)
 > attach(data);
 > 
 > Lambda = V1
-> E = V2
+> E1 = V2
+> E2 = V3
 > 
-> plot(Lambda,E,type="l",xlab="Lambda",ylab="Temps moyen d'attente",col="red")
+> plot(Lambda,E1,xlim=c(0,9), ylim=c(0,16), type="l",xlab="Lambda",ylab="Temps moyen d'attente",col="red")
+> lines(Lambda,E2,type="l",col="blue")
+> legend("topleft",legend=c("E_modele1[A]", "E_modele2[A]"), col=c("red","blue"),lty=1.1,cex=0.8)
 > 
-> modelname = "Result_modele2.txt"
-> data = read.table(modelname)
-> attach(data);
-The following objects are masked from data (pos = 3):
-
-    V1, V2, V3
-
-> 
-> Lambda = V1
-> E = V2
-> 
-> plot(Lambda,E,type="l",xlab="Lambda",ylab="E",col="red")
 > 
 > proc.time()
 utilisateur     système      écoulé 
-      0.160       0.011       0.165 
+      0.222       0.043       0.262 
