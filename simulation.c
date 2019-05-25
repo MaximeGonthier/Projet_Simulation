@@ -245,6 +245,15 @@ void Modele_1(FILE* f1, int Lambda){
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile[8]);
 	FILE *fresult1 = fopen("Result_modele1.txt","a");
 	fprintf(fresult1,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile[8]);
+
+	FILE *resultE = fopen("resultE.txt","a");
+	fprintf(resultE,"%f",Moy);
+	fclose(resultE);
+
+	FILE *result90 = fopen("result90.txt","a");
+	fprintf(result90,"%f",Tabpercentile[8]);
+	fclose(result90);
+
 	fclose(fresult1);
 	free(Tabpercentile);
 }
@@ -291,6 +300,15 @@ void Modele_2(FILE* f1, int Lambda){
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile2[8]);
 	FILE *fresult2 = fopen("Result_modele2.txt","a");
 	fprintf(fresult2,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile2[8]);
+
+	FILE *resultE = fopen("resultE.txt","a");
+	fprintf(resultE," \t %f\n",Moy);
+	fclose(resultE);
+
+	FILE *result90 = fopen("result90.txt","a");
+	fprintf(result90," \t %f\n",Tabpercentile2[8]);
+	fclose(result90);
+
 	fclose(fresult2);
 	free(Tabpercentile2);
 }
@@ -376,7 +394,7 @@ int main(int argc, char **argv){
 		fscanf(f,"%d",&Lambda);
 		FILE *f1 = fopen("MODELE1.data","w");
 		FILE *f2 = fopen("MODELE2.data","w");
-		FILE *f3 = fopen("MODELE3.data","w");
+		//FILE *f3 = fopen("MODELE3.data","w");
 		//printf("Modèle 1 : \n");
 		Modele_1(f1, Lambda);
 		init_global();
@@ -384,13 +402,13 @@ int main(int argc, char **argv){
 		Modele_2(f2, Lambda);
 		init_global();
 
-		Modele_3(f3, Lambda);
-		init_global();
+		//Modele_3(f3, Lambda);
+		//init_global();
 
 		fclose(f1);
 		fclose(f2);	
 
-		fclose(f3);
+		//fclose(f3);
 
 		sleep(1);
 	}
