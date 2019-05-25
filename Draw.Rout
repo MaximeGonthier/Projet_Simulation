@@ -1,6 +1,6 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R est un logiciel libre livré sans AUCUNE GARANTIE.
@@ -17,30 +17,38 @@ Tapez 'q()' pour quitter R.
 
 [Sauvegarde de la session précédente restaurée]
 
-> # pour executer le code : R CMD BATCH "Draw.R"
+> # pour executer le code : R CMD BATCH "DrawE.R"
 > 
-> modelname = "Result_modele1.txt"
-> data = read.table(modelname)
-> attach(data);
+> model1 = "result90.txt"
+> data = read.table(model1)
+> attach(data)
 > 
 > Lambda = V1
-> E = V2
+> T1 = V2
+> T2 = V3
 > 
-> plot(Lambda,E,type="l",xlab="Lambda",ylab="Temps moyen d'attente",col="red")
+> plot(Lambda,T2,type="l",xlab="Lambda",ylab="t_90[A]",col="red")
+> lines(Lambda,T1,type="l",col="blue")
+> legend("topleft",legend=c("T_90[A]2", "T_90[A]1"), col=c("red","blue"),lty=1.1,cex=0.8)
 > 
-> modelname = "Result_modele2.txt"
-> data = read.table(modelname)
-> attach(data);
+> model2 = "resultE.txt"
+> data = read.table(model2)
+> attach(data)
 The following objects are masked from data (pos = 3):
 
     V1, V2, V3
 
 > 
 > Lambda = V1
-> E = V2
+> E1 = V2
+> E2 = V3
 > 
-> plot(Lambda,E,type="l",xlab="Lambda",ylab="E",col="red")
+> plot(Lambda,E2,type="l",xlab="Lambda",ylab="E[A]",col="red")
+> lines(Lambda,E1,type="l",col="blue")
+> legend("topleft",legend=c("E[A]2", "E[A]1"), col=c("red","blue"),lty=1.1,cex=0.8)
+>   
+> 
 > 
 > proc.time()
 utilisateur     système      écoulé 
-      0.267       0.021       0.287 
+      0.182       0.012       0.186 

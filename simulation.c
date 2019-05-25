@@ -281,11 +281,11 @@ void Modele_1(FILE* f1, int Lambda){
 	fprintf(fresult1,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile[8]);
 
 	FILE *resultE = fopen("resultE.txt","a");
-	fprintf(resultE,"%f",Moy);
+	fprintf(resultE,"%d \t %f",Lambda, Moy);
 	fclose(resultE);
 
 	FILE *result90 = fopen("result90.txt","a");
-	fprintf(result90,"%f",Tabpercentile[8]);
+	fprintf(result90,"%d \t %f",Lambda, Tabpercentile[8]);
 	fclose(result90);
 
 	fclose(fresult1);
@@ -411,7 +411,7 @@ int main(int argc, char **argv){
 
 	FILE *result90 = fopen("result90.txt","w");
 	fclose(result90);
-	FILE *resultE = fopen("resultE.txt","a");
+	FILE *resultE = fopen("resultE.txt","w");
 	fclose(resultE);
 	
 	init_global();
