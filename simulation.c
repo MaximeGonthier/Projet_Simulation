@@ -300,6 +300,11 @@ int main(int argc, char **argv){
 	srandom(getpid() + time(NULL));
 	FILE *f = fopen(argv[1],"r");
 	int Lambda;
+
+	FILE *fresult1 = fopen("Result_modele1.txt","w");
+	fclose(fresult1);
+	FILE *fresult2 = fopen("Result_modele2.txt","w");
+	fclose(fresult2);
 	
 	init_global();
 	for(int i = 0; i < 9; i++)
@@ -313,9 +318,9 @@ int main(int argc, char **argv){
 		//printf("Modèle 2 : \n");
 		Modele_2(f2, Lambda);
 		init_global();
-		fclose(f1);
-		fclose(f2);	
-		sleep(1);
+		//fclose(f1);
+		//fclose(f2);	
+		//sleep(1);
 	}
 	fclose(f);
 

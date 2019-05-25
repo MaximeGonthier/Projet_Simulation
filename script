@@ -3,9 +3,11 @@ gcc simulation.c -lm
 echo "execution"
 ./a.out lambda.txt
 echo "Compilation R"
-R CMD BATCH "Draw90.R"
-R CMD BATCH "DrawE.R"
+#R CMD BATCH "Draw90.R"
+R CMD BATCH "Draw.R"
 echo "affichage"
 xpdf Rplots.pdf
 rm -f a.out
+rm -f *.Rout
+
 
