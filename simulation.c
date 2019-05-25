@@ -406,6 +406,13 @@ int main(int argc, char **argv){
 	fclose(fresult1);
 	FILE *fresult2 = fopen("Result_modele2.txt","w");
 	fclose(fresult2);
+	FILE *fresult3 = fopen("Result_modele3.txt","w");
+	fclose(fresult3);
+
+	FILE *result90 = fopen("result90.txt","w");
+	fclose(result90);
+	FILE *resultE = fopen("resultE.txt","a");
+	fclose(resultE);
 	
 	init_global();
 	for(int i = 0; i < 9; i++)
@@ -413,7 +420,7 @@ int main(int argc, char **argv){
 		fscanf(f,"%d",&Lambda);
 		FILE *f1 = fopen("MODELE1.data","w");
 		FILE *f2 = fopen("MODELE2.data","w");
-		//FILE *f3 = fopen("MODELE3.data","w");
+		FILE *f3 = fopen("MODELE3.data","w");
 		//printf("Modèle 1 : \n");
 		Modele_1(f1, Lambda);
 		init_global();
@@ -429,7 +436,7 @@ int main(int argc, char **argv){
 		fclose(f1);
 		fclose(f2);	
 
-		//fclose(f3);
+		fclose(f3);
 
 		sleep(1);
 	}
