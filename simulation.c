@@ -187,10 +187,20 @@ void Arrivee_Client(event e, int Lambda, int mod){
 		temps = e.date;
 	}
 	else if(mod == 3){
+		printf("debut mod 3 AC\n");
 		n++;
 		Nentree ++;
+		if(n<=N){
+			event e2;
+			e2.type = 1; //service
+			e2.date = e.date + Exponnentielle(Mu);
+			e2.etat = 0; //non traité
+			Ajouter_Ech(e2);
+		}
+		temps = e.date;
+		
 		min = Tabmodele3[0];
-			indicemin = 0;
+			//indicemin = 0;
 			for (int i = 0; i < 10; i++)
 			{
 				if(min > Tabmodele3[i])
@@ -200,6 +210,8 @@ void Arrivee_Client(event e, int Lambda, int mod){
 				}
 			}
 			Tabmodele3[indicemin]++;
+			printf("fin mod 3 AC, Le pc est le numero : %d \n",indicemin);
+
 	}
 }
 void service_event(event e, int mod){
@@ -224,7 +236,9 @@ void service_event(event e, int mod){
 			}
 		}
 		if(mod == 3){
+			printf("debut mod 3 FS\n");
 			if(Tabmodele3[indicemin] == 1){
+				printf("FS dans le if tab3 == 1\n");
 				event e2;
 				e2.type = 1;
 				e2.date = e.date + Exponnentielle(Mu);
@@ -382,7 +396,8 @@ void Modele_3(FILE* f1, int Lambda){
 		if(e.type == 0){
 			Arrivee_Client(e,Lambda,3);
 		}
-		if ((e.type == 1)) {
+		if (e.type == 1) {
+			printf("LANCE FS MOD 3\n");
 			service_event(e,3);
 		}
 		Moy= Moyenne(1,e);
@@ -429,8 +444,8 @@ int main(int argc, char **argv){
 		init_global();
 
 
-		/*Modele_3(f3, Lambda);
-		init_global();*/
+		Modele_3(f3, Lambda);
+		init_global();
 
 
 		fclose(f1);
