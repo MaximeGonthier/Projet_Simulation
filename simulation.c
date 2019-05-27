@@ -240,13 +240,13 @@ void service_event(event e, int mod){
 			}
 		}
 		if(mod == 3){
+			Tabmodele3[e.file] --;
 			if(Tabmodele3[e.file] > 0){
 				event e2;
 				e2.type = 1; //service
 				e2.date = e.date + Exponnentielle(Mu);
 				e2.etat = 0;
 				e2.file = e.file;
-				Tabmodele3[e.file] --;
 				Ajouter_Ech(e2);
 			}
 		}
