@@ -187,7 +187,7 @@ void Arrivee_Client(event e, int Lambda, int mod){
 		temps = e.date;
 	}
 	else if(mod == 3){
-		printf("debut mod 3 AC\n");
+		//printf("debut mod 3 AC\n");
 		n++;
 		Nentree ++;
 		if(n<=N){
@@ -198,9 +198,9 @@ void Arrivee_Client(event e, int Lambda, int mod){
 			Ajouter_Ech(e2);
 		}
 		temps = e.date;
-		
+
 		min = Tabmodele3[0];
-			//indicemin = 0;
+		indicemin = 0;
 			for (int i = 0; i < 10; i++)
 			{
 				if(min > Tabmodele3[i])
@@ -209,8 +209,8 @@ void Arrivee_Client(event e, int Lambda, int mod){
 					indicemin = i;
 				}
 			}
-			Tabmodele3[indicemin]++;
-			printf("fin mod 3 AC, Le pc est le numero : %d \n",indicemin);
+			Tabmodele3[indicemin]+=1;
+			printf("fin mod 3 AC, Le PC est le numero : %d, Il y a  = %f personnes sur ce PC \n",indicemin,Tabmodele3[indicemin]);
 
 	}
 }
@@ -236,15 +236,17 @@ void service_event(event e, int mod){
 			}
 		}
 		if(mod == 3){
-			printf("debut mod 3 FS\n");
+			printf("debut mod 3 FS, Nb de personnes sur le PC = %f\n",Tabmodele3[indicemin]);
 			if(Tabmodele3[indicemin] == 1){
-				printf("FS dans le if tab3 == 1\n");
+				printf("Service sur le PC numéro : %f\n",indicemin);
+				Tabmodele3[indicemin]-=1;
+				//printf("dans le if FS, tab[indicemin] = %f\n",Tabmodele3[indicemin]);
 				event e2;
 				e2.type = 1;
 				e2.date = e.date + Exponnentielle(Mu);
 				e2.etat = 0;
 				Ajouter_Ech(e2);
-				Tabmodele3[indicemin]--;
+				
 			}
 		}
 	}
@@ -397,7 +399,6 @@ void Modele_3(FILE* f1, int Lambda){
 			Arrivee_Client(e,Lambda,3);
 		}
 		if (e.type == 1) {
-			printf("LANCE FS MOD 3\n");
 			service_event(e,3);
 		}
 		Moy= Moyenne(1,e);
