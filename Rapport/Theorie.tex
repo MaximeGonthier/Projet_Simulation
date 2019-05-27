@@ -54,8 +54,8 @@
 	$\rho = \frac{\lambda}{N*\mu}$\\
 	\\
 	On à également besoin du nombre moyen de client théorique $Nmoyen$:\\
-	$Nmoyen = E[nq(???)] = \frac{\rho * \varrho}{1-\rho}$\\
-	ou $\varrho = Proba???(\ge N) = \frac{(N*\rho)^{N}}{N!(1-\rho)^{\rho_{0}}}$.\\
+	$Nmoyen = E[n] = \frac{\rho * \varrho}{1-\rho}$\\
+	ou $\varrho = Proba(\ge N) = \frac{(N*\rho)^{N}}{N!(1-\rho)^{\rho_{0}}}$.\\
 	\\
 	Ici, $\rho_{0}$ représente la probabilité que la file soit vide et se calcule de la façon suivante :\\
 	$\rho_{0} = 1 + (\frac{(N*\rho)^{N}}{N!(1-\rho)}+\sum^{N-1}_{n = 1}\frac{(N*\rho)^{N}}{n!})$\\
@@ -69,7 +69,7 @@
 
 \section{Modèle n°2 - File M/M/1}
 	\subsection{description du modèle}
-	Le second modèle est décris de la façon suivante :\\
+	Le deuxième modèle est décris de la façon suivante :\\
 	\textit{Le patron choisit au hasard, uniformément un ordinateur parmis les N puis il donne au client un ticket numéroté pour l'ordinateur choisi.\\
 			Dès que le client d'un ordinateur a fini, c'est le client qui a le plus petit numéro parmis ceux affecté à cet ordinateur qui prend la place.}
 	\subsubsection{représentation}
@@ -106,4 +106,15 @@
 		\\
 		Le 90 percentile du temps d'attente s'exprime donc de la façon suivante :\\
 		$max(0,\frac{E[A]}{\rho}ln(10*\rho))$
+		
+
+\section{Modèle n°3 - File M/M/N}
+	\subsection{description du modèle}
+	Le troisième modèle est décris de la façon suivante :\\
+	\textit{Le patron choisit l'oridnateur avec le moins d'attente puis il donne au client un ticket numéroté pour l'ordinateur choisi.\\
+			Dès que le client d'un ordinateur a fini, c'est le client qui a le plus petit numéro parmis ceux affecté à cet ordinateur qui prend la place.}
+	\subsubsection{représentation}
+	
+	\subsection{Données et Formules}
+	
 \end{document}

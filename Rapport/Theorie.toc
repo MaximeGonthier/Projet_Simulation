@@ -1,4 +1,4 @@
-\babel@toc {french}{}
+\select@language {french}
 \contentsline {section}{\numberline {1}Introduction}{}
 \contentsline {section}{\numberline {2}Mod\IeC {\`e}les n\IeC {\textdegree }1 - File M/M/N}{}
 \contentsline {subsection}{\numberline {2.1}description du mod\IeC {\`e}le}{}
