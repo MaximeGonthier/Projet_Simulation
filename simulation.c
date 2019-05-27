@@ -22,7 +22,7 @@ int Nentree = 0;
 double Moy = 0;
 double Per = 0;
 double Tmoyen = 0;
-double* Tabmodele3;
+double Tabmodele3[10];
 
 void init_global(){
 	temps = 0;
@@ -32,7 +32,7 @@ void init_global(){
 	Nentree = 0;
 	Moy = 0;
 	Tmoyen = 0;
-	Tabmodele3 = (double*)malloc(10*sizeof(double*));
+	//Tabmodele3 = (double*)malloc(10*sizeof(double*));
 	for (int i = 0; i < 10; i++){
 		Tabmodele3[i] = 0;
 	}
@@ -184,6 +184,7 @@ void Arrivee_Client(event e, int Lambda, int mod){
 		temps = e.date;
 	}
 	else if(mod == 3){
+		printf("AC : ");
 		int min = 0;
 		min = Tabmodele3[0];
 		int indicemin = 0;
@@ -196,18 +197,22 @@ void Arrivee_Client(event e, int Lambda, int mod){
 				}
 			}
 		Tabmodele3[indicemin]+=1;
+		printf(" i --> %d \t Tab[i] --> %f \n",indicemin, Tabmodele3[indicemin]);
 		if(Tabmodele3[indicemin]==1){
 			event e2;
 			e2.type = 1; //service
 			e2.date = e.date + Exponnentielle(Mu);
 			e2.etat = 0; //non traité
-			e.file = indicemin;
+			e2.file = indicemin;
+			printf("ajout d'un service dans la file %d \t indicemin --> %d \n",e2.file, indicemin);
+			//sleep(1);
 			Ajouter_Ech(e2);
+
 		}
 		n++;
 		Nentree ++;
 		temps = e.date;
-		printf("fin mod 3 AC, Le PC est le numero : %d, Il y a  = %f personnes sur ce PC \n",e.file,Tabmodele3[indicemin]);
+		//printf("fin mod 3 AC, Le PC est le numero : %d, Il y a  = %f personnes sur ce PC \n",e.file,Tabmodele3[indicemin]);
 
 	}
 }
@@ -235,7 +240,7 @@ void service_event(event e, int mod){
 			}
 		}
 		if(mod == 3){
-			if(n > 0){
+			if(Tabmodele3[e.file] > 0){
 				event e2;
 				e2.type = 1; //service
 				e2.date = e.date + Exponnentielle(Mu);
@@ -444,6 +449,7 @@ int main(int argc, char **argv){
 
 		Modele_3(f3, Lambda);
 		init_global();
+		
 
 
 		fclose(f1);
