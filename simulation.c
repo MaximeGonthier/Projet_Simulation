@@ -184,7 +184,7 @@ void Arrivee_Client(event e, int Lambda, int mod){
 		temps = e.date;
 	}
 	else if(mod == 3){
-		printf("AC : ");
+		//printf("AC : ");
 		int min = 0;
 		min = Tabmodele3[0];
 		int indicemin = 0;
@@ -197,14 +197,14 @@ void Arrivee_Client(event e, int Lambda, int mod){
 				}
 			}
 		Tabmodele3[indicemin]+=1;
-		printf(" i --> %d \t Tab[i] --> %f \n",indicemin, Tabmodele3[indicemin]);
+		//printf(" i --> %d \t Tab[i] --> %f \n",indicemin, Tabmodele3[indicemin]);
 		if(Tabmodele3[indicemin]==1){
 			event e2;
 			e2.type = 1; //service
 			e2.date = e.date + Exponnentielle(Mu);
 			e2.etat = 0; //non traité
 			e2.file = indicemin;
-			printf("ajout d'un service dans la file %d \t indicemin --> %d \n",e2.file, indicemin);
+			//printf("ajout d'un service dans la file %d \t indicemin --> %d \n",e2.file, indicemin);
 			//sleep(1);
 			Ajouter_Ech(e2);
 
@@ -353,11 +353,11 @@ void Modele_2(FILE* f1, int Lambda){
 	fprintf(fresult2,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile2[8]);
 
 	FILE *resultE = fopen("resultE.txt","a");
-	fprintf(resultE," \t %f\n",Moy);
+	fprintf(resultE," \t %f",Moy);
 	fclose(resultE);
 
 	FILE *result90 = fopen("result90.txt","a");
-	fprintf(result90," \t %f\n",Tabpercentile2[8]);
+	fprintf(result90," \t %f",Tabpercentile2[8]);
 	fclose(result90);
 
 	fclose(fresult2);
@@ -409,6 +409,15 @@ void Modele_3(FILE* f1, int Lambda){
 	FILE *fresult3 = fopen("Result_modele3.txt","a");
 	fprintf(fresult3,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile3[8]);
 	fclose(fresult3);
+
+	FILE *resultE = fopen("resultE.txt","a");
+	fprintf(resultE," \t %f\n",Moy);
+	fclose(resultE);
+
+	FILE *result90 = fopen("result90.txt","a");
+	fprintf(result90," \t %f\n",Tabpercentile3[8]);
+	fclose(result90);
+
 	free(Tabpercentile3);
 
 }
@@ -440,17 +449,14 @@ int main(int argc, char **argv){
 		FILE *f2 = fopen("MODELE2.data","w");
 		FILE *f3 = fopen("MODELE3.data","w");
 		
-		/*Modele_1(f1, Lambda);
+		Modele_1(f1, Lambda);
 		init_global();
 		
 		Modele_2(f2, Lambda);
-		init_global();*/
-
+		init_global();
 
 		Modele_3(f3, Lambda);
 		init_global();
-		
-
 
 		fclose(f1);
 		fclose(f2);	
@@ -462,25 +468,3 @@ int main(int argc, char **argv){
 
 	return 0;
 }
-
-////////////////////////ANCIEN FS MOD 3///////////////////////
-/*int min =  Tabmodele3[0];
-			int indicemin = 0;
-			for (int i = 0; i < 10; i++)
-			{
-				if(min > Tabmodele3[i])
-				{
-					min = Tabmodele3[i];
-					indicemin = i;
-				}
-			}
-			printf("debut mod 3 FS, Nb de personnes sur le PC = %f\n",Tabmodele3[indicemin]);
-			if(Tabmodele3[indicemin] == 1){
-				printf("Service sur le PC numéro : %d\n",indicemin);
-				Tabmodele3[indicemin]-=1;
-				//printf("dans le if FS, tab[indicemin] = %f\n",Tabmodele3[indicemin]);
-				event e2;
-				e2.type = 1;
-				e2.date = e.date + Exponnentielle(Mu);
-				e2.etat = 0;
-				Ajouter_Ech(e2);*/
