@@ -1,5 +1,9 @@
-\select@language {french}
+\babel@toc {french}{}
 \contentsline {section}{\numberline {1}Introduction}{}
 \contentsline {section}{\numberline {2}Explication de la programmation}{}
+\contentsline {subsection}{\numberline {2.1}Entr\IeC {\'e}e et sortie du progamme}{}
+\contentsline {subsection}{\numberline {2.2}structure du progamme}{}
+\contentsline {subsubsection}{\numberline {2.2.1}premier mod\IeC {\`e}le}{}
+\contentsline {subsubsection}{\numberline {2.2.2}second mod\IeC {\`e}le}{}
 \contentsline {section}{\numberline {3}Explication des r\IeC {\'e}sultats th\IeC {\'e}oriques}{}
 \contentsline {section}{\numberline {4}Conclusion}{}
