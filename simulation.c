@@ -8,22 +8,25 @@
 //#define Lambda 9
 #define Mu 1
 
-#define EPSILON 1e-5
+#define EPSILON 1e-5 
 #define MAXEVENT 100000	//taille max de l'echeancier
 #define MAXTEMPS 10000	//cond d'arret
 #define N 10//nombre de serveurs
-//Maxtemps devrait correspondre a 1h d'apres l'énoncé
 
-double temps = 0;
+///////////////////////////////VARIBALES GLOBALES UTILISEES POUR LES SIMULATION///////////////////////////
+double temps = 0;	//temps de simulation
 long int n = 0;		//nb de clients dans la file a l'instant temps
 int compteur = 0;	//cond d'arret 2
-double cumule = 0;
-int Nentree = 0;
-double Moy = 0;
-double Per = 0;
-double Tmoyen = 0;
-double Tabmodele3[10];
+double cumule = 0;	//cumule des temps passées par les clients dans la simulation
+int Nentree = 0;	//Nombre total d'entrée par simulation
+double Moy = 0;		//Temps d'attente moyen par simulation
+double Per = 0;		//90 percentile du temps d'attente par simulation
+double Tmoyen = 0;	//Temps d'attente moyen par simulation
+double Tabmodele3[10]; //Tableau représentant le nombre de client pour chaque serveur du modèle 3
 
+/**
+ * Initialisation des différentes variables globales pour les simulations
+ */
 void init_global(){
 	temps = 0;
 	n = 0;
@@ -37,17 +40,29 @@ void init_global(){
 		Tabmodele3[i] = 0;
 	}
 }
+
+/**
+ * Structure représentant un événement de la simulation
+ */
 typedef struct Event {
 	int type; //0 pour arrive 1 pour sortie
-	double date;
+	double date; 
 	int etat; //0 pour non traité 1 pour non traité
-	int file; //exclusif au modèle 3
+	int file; //exclusif au modèle 3,1 à 10 pour le modèle 3, -1 pour les autres modèles
 }event;
+
+/**
+ * Structure contenant les évènement
+ */
 typedef struct Echeancier {
 	event tab[MAXEVENT];
 	int taille;
 }echeancier;
 echeancier Ech;
+
+/**
+ * Loi exponnentielle permettant de calculer le temps interarrivé et le temps de service
+ */
 double Exponnentielle(int lbda) {
 	double r = (double)random()/RAND_MAX;	//entre 0 et 1
 	
@@ -56,14 +71,21 @@ double Exponnentielle(int lbda) {
 	}
 	return -log(r)/(lbda*1.0); // - log(u)/lamda, avec U = unif(0,1)
 }
+
+/**
+ * Fonction permettant d'ajouter un évènement à l'echeancier
+ */
 void Ajouter_Ech(event e) {
 	if(Ech.taille < MAXEVENT) {
 		Ech.tab[Ech.taille] = e;
 		Ech.taille++;
-		//printf("Taille = %d\n", Ech.taille);
 	}
-	//else (printf("echeancier PLEIN"));
+	else (printf("echeancier PLEIN"));
 }
+
+/**
+ * Initialisation de l'échéancier pour la simulation
+ */
 void Init_Ech(){
 	event e;
 	e.type = 0;
@@ -73,7 +95,11 @@ void Init_Ech(){
 	Ech.taille = 0;
 	Ajouter_Ech(e);
 }
-event extraire(){//extrait l'event le plus ancien non traité
+
+/**
+ * extrait l'event le plus ancien non traité
+ */
+event extraire(){
 	int i, imin;
 	event min;
 
@@ -99,6 +125,10 @@ event extraire(){//extrait l'event le plus ancien non traité
 	Ech.tab[imin].etat = 1;
 	return min;
 }
+
+/**
+ * condition d'arrêt de la simulation
+ */
 int condition_arret(long double Old, long double New){
 	if(fabs(Old-New) < EPSILON && temps > 1000){
 		compteur ++;
@@ -107,19 +137,24 @@ int condition_arret(long double Old, long double New){
 	}
 	return 0;
 }
-// if(n>N)Tcumule += (e.date-temps)*(n-N); Tmoyen = Tcumule/Nentree
+
+/**
+ * Calcul du temps d'attente moyen par simulation
+ * le paramètre serveur permet de calculer la moyenne pour une M/M/1 ou une M/M/N
+ */
 double Moyenne(int serveur, event e){
 	if(n > serveur){
 		cumule += (e.date - temps) * (n - serveur);
 		Tmoyen =(double) cumule/Nentree;
 	}
-	//printf("serveur = %d, n = %ld, Nentree = %d, cumule = %f, temps = %f, Tmoyen = %f\n",serveur, n, Nentree, cumule, temps, Tmoyen);
 	return Tmoyen;
 }
 
+/**
+ * calcul du 90 percentile du temps d'attente par simulation
+ */
 double* Percentile (double Tmoyen, double* Tabtemps){
 	if(Tmoyen > Tabtemps[8]){
-		//printf("supp\n");
 		if(Tmoyen > Tabtemps[9]){
 			Tabtemps[8] = Tabtemps[9];
 			Tabtemps[9] = Tmoyen;
@@ -147,19 +182,40 @@ double* Percentile (double Tmoyen, double* Tabtemps){
 	}
 	return Tabtemps;
 }
+
+/**
+ * Fonction gérant l'arrivée des clients
+ */
 void Arrivee_Client(event e, int Lambda, int mod){
 	event e1;
 	e1.type  = 0; //arrivée client
 	e1.date = e.date + Exponnentielle(Lambda);
 	e1.etat = 0; //non traité 
-	e1.file = -1;
+	e1.file = -1; //Inutile si on est pas dans le modèle 3
 
 	Ajouter_Ech(e1);
 
-	if(mod == 2){
-		double alea = (double)random()/RAND_MAX;	//entre 0 et 1
-		if(alea < 0.1){
-			//if n == 1
+	/**
+	 * Arrivée client pour le modèle 1
+	 */
+	if(mod == 1){
+		n++; //+1 client dans la file
+		Nentree ++; //+1 client dans le total des clients
+		if(n<=N){
+			event e2;
+			e2.type = 1; //service
+			e2.date = e.date + Exponnentielle(Mu);
+			e2.etat = 0; //non traité
+			Ajouter_Ech(e2);
+		}
+		temps = e.date;
+	}
+	/**
+	 * Arrivée client pour le modèle 2
+	 */
+	else if(mod == 2){
+		double alea = (double)random()/RAND_MAX;//entre 0 et 1
+		if(alea < 0.1){ //représente la probabilité que le client entre bien dans la file
 			if(n==1){
 				event e2;
 				e2.type = 1; //service
@@ -172,23 +228,14 @@ void Arrivee_Client(event e, int Lambda, int mod){
 		}
 		temps = e.date;
 	}
-	else if(mod == 1){
-		n++; //+1 client dans la file
-		Nentree ++;
-		if(n<=N){
-			event e2;
-			e2.type = 1; //service
-			e2.date = e.date + Exponnentielle(Mu);
-			e2.etat = 0; //non traité
-			Ajouter_Ech(e2);
-		}
-		temps = e.date;
-	}
+	/**
+	 * Arrivée client pour le modèle 3
+	 */
 	else if(mod == 3){
-		//printf("AC : ");
 		int min = 0;
 		min = Tabmodele3[0];
 		int indicemin = 0;
+			//choix de la file avec le plus petit nombre de clients
 			for (int i = 0; i < 10; i++)
 			{
 				if(min > Tabmodele3[i])
@@ -197,42 +244,32 @@ void Arrivee_Client(event e, int Lambda, int mod){
 					indicemin = i;
 				}
 			}
-		Tabmodele3[indicemin]+=1;
-		//printf(" i --> %d \t Tab[i] --> %f \n",indicemin, Tabmodele3[indicemin]);
+		Tabmodele3[indicemin]+=1;//ajout d'un client dans cette file
 		if(Tabmodele3[indicemin]==1){
 			event e2;
 			e2.type = 1; //service
 			e2.date = e.date + Exponnentielle(Mu);
 			e2.etat = 0; //non traité
-			e2.file = indicemin;
-			//printf("ajout d'un service dans la file %d \t indicemin --> %d \n",e2.file, indicemin);
-			//sleep(1);
+			e2.file = indicemin; //on indique dans quelle file on va devoir traiter le service
 			Ajouter_Ech(e2);
-
 		}
 		n++;
 		Nentree ++;
 		temps = e.date;
-		//printf("fin mod 3 AC, Le PC est le numero : %d, Il y a  = %f personnes sur ce PC \n",e.file,Tabmodele3[indicemin]);
-
 	}
 }
+
+/**
+ * Fonction gérant le service des clients
+ */ 
 void service_event(event e, int mod){
 	if (n > 0){
 		n--;
-		if(mod == 2){
-			//if n > 0
-			if(n > 1){
-				event e2;
-				e2.type = 1; //service
-				e2.date = e.date + Exponnentielle(Mu);
-				e2.etat = 0;
-				e2.file = -1;
-				Ajouter_Ech(e2);
-			}
-		}
+		/**
+		 * service du modèle 1
+		 */
 		if(mod == 1){
-			if(n >= N){
+			if(n >= N){//si le nombre de client est inferieur au nombre de serveur, on lance un service
 				event e2;
 				e2.type = 1; //service
 				e2.date = e.date + Exponnentielle(Mu);
@@ -241,9 +278,27 @@ void service_event(event e, int mod){
 				Ajouter_Ech(e2);
 			}
 		}
+
+		/**
+		 * service du modèle 2
+		 */
+		if(mod == 2){
+			if(n > 1){//si le nombre de client est positif, on lance un service
+				event e2;
+				e2.type = 1; //service
+				e2.date = e.date + Exponnentielle(Mu);
+				e2.etat = 0;
+				e2.file = -1;
+				Ajouter_Ech(e2);
+			}
+		}
+
+		/**
+		 * service du modèle 3
+		 */
 		if(mod == 3){
-			Tabmodele3[e.file] --;
-			if(Tabmodele3[e.file] > 0){
+			Tabmodele3[e.file] --; //on enlève un client de la file concernée par le service
+			if(Tabmodele3[e.file] > 0){ //si le nombre de client dans cette file est positif, on lance un service
 				event e2;
 				e2.type = 1; //service
 				e2.date = e.date + Exponnentielle(Mu);
@@ -265,6 +320,9 @@ void Modele_1(FILE* f1, int Lambda){
 	Init_Ech();
 	event e;
 
+	/**
+	 * Initialisation du tableau permettant d'obtenir le 90 percentile du temps d'attente
+	 */
 	double* Tabpercentile = (double*)malloc(10*sizeof(double*));
 	for (int i = 0; i < 10; i++){
 		Tabpercentile[i] = 0;
@@ -281,7 +339,6 @@ void Modele_1(FILE* f1, int Lambda){
 			fprintf(f1,"0 \t 0 \n");
 		}
 		else{
-			//printf("temps = %f et N = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
 			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
 		}
 
@@ -293,12 +350,14 @@ void Modele_1(FILE* f1, int Lambda){
 		}
 		Moy= Moyenne(10,e);
 		Tabpercentile = Percentile(Moy,Tabpercentile);
-		//printf("tabperc : %f\n",Tabpercentile[8]);
 	}	
+
+	//Ecriture des résultats dans un fichier
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile[8]);
 	FILE *fresult1 = fopen("Result_modele1.txt","a");
 	fprintf(fresult1,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile[8]);
 
+	//Ecriture de la moyenne et du 90percentile dans un fichier communs aux trois simulations pour le tracage des courbes
 	FILE *resultE = fopen("resultE.txt","a");
 	fprintf(resultE,"%d \t %f",Lambda, Moy);
 	fclose(resultE);
@@ -320,6 +379,9 @@ void Modele_2(FILE* f1, int Lambda){
 	Init_Ech();
 	event e;
 
+	/**
+	 * Initialisation du tableau permettant d'obtenir le 90 percentile du temps d'attente
+	 */
 	double* Tabpercentile2 = (double*)malloc(10*sizeof(double*));
 	for (int i = 0; i < 10; i++){
 		Tabpercentile2[i] = 0;
@@ -330,7 +392,6 @@ void Modele_2(FILE* f1, int Lambda){
 		//Ici si on a 1 client ou moins cela veut dire qu'un client est forcément en train d'être servi
 		//donc on ne le compte pas dans les clients en attente dans la file d'attente, d'où le if(n>1)
 		if (n>1) cumule += (n-1)*(e.date-temps);
-		//cumule += (e.date-temps)*n;
 
 		OldNmoyen = Nmoyen;
 		Nmoyen = cumule/temps;
@@ -340,7 +401,6 @@ void Modele_2(FILE* f1, int Lambda){
 			fprintf(f1,"0 \t 0 \n");
 		}
 		else{
-			//printf("temps = %f et n = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
 			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
 		}
 
@@ -353,10 +413,13 @@ void Modele_2(FILE* f1, int Lambda){
 		Moy= Moyenne(1,e);
 		Tabpercentile2 = Percentile(Moy,Tabpercentile2);
 	}	
+
+	//Ecriture des résultats dans un fichier
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile2[8]);
 	FILE *fresult2 = fopen("Result_modele2.txt","a");
 	fprintf(fresult2,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile2[8]);
 
+	//Ecriture de la moyenne et du 90percentile dans un fichier communs aux trois simulations pour le tracage des courbes
 	FILE *resultE = fopen("resultE.txt","a");
 	fprintf(resultE," \t %f",Moy);
 	fclose(resultE);
@@ -380,6 +443,9 @@ void Modele_3(FILE* f1, int Lambda){
 	Init_Ech();
 	event e;
 
+	/**
+	 * Initialisation du tableau permettant d'obtenir le 90 percentile du temps d'attente
+	 */
 	double* Tabpercentile3 = (double*)malloc(10*sizeof(double*));
 	for (int i = 0; i < 10; i++){
 		Tabpercentile3[i] = 0;
@@ -397,7 +463,6 @@ void Modele_3(FILE* f1, int Lambda){
 			fprintf(f1,"0 \t 0 \n");
 		}
 		else{
-			//printf("temps = %f et n = %ld et Nmoyen = %Lf \n",temps,n,Nmoyen);
 			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
 		}
 
@@ -410,10 +475,13 @@ void Modele_3(FILE* f1, int Lambda){
 		Moy= Moyenne(10,e);
 		Tabpercentile3 = Percentile(Moy,Tabpercentile3);
 	}	
+
+	//Ecriture des résultats dans un fichier
 	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile3[8]);
 	FILE *fresult3 = fopen("Result_modele3.txt","a");
 	fprintf(fresult3,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile3[8]);
 
+	//Ecriture de la moyenne et du 90percentile dans un fichier communs aux trois simulations pour le tracage des courbes
 	FILE *resultE = fopen("resultE.txt","a");
 	fprintf(resultE," \t %f\n",Moy);
 	fclose(resultE);
@@ -432,9 +500,15 @@ void Modele_3(FILE* f1, int Lambda){
 int main(int argc, char **argv){
 
 	srandom(getpid() + time(NULL));
+	/**
+	 * ouverture du fichier contenant les différentes valeurs de lambda que l'on veut tester
+	 */
 	FILE *f = fopen(argv[1],"r");
 	int Lambda;
 
+	/**
+	 * Ouverture des fichier de résultat afin de les effacer s'ils sont rempli
+	 */
 	FILE *fresult1 = fopen("Result_modele1.txt","w");
 	fclose(fresult1);
 	FILE *fresult2 = fopen("Result_modele2.txt","w");
@@ -467,8 +541,6 @@ int main(int argc, char **argv){
 		fclose(f1);
 		fclose(f2);	
 		fclose(f3);
-
-		sleep(1);
 	}
 	fclose(f);
 
