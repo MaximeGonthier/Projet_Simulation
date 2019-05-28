@@ -455,14 +455,14 @@ int main(int argc, char **argv){
 		FILE *f2 = fopen("MODELE2.data","w");
 		FILE *f3 = fopen("MODELE3.data","w");
 		
-		//Modele_1(f1, Lambda);
-		//init_global();
+		Modele_1(f1, Lambda);
+		init_global();
 		
 		Modele_2(f2, Lambda);
 		init_global();
 
-		//Modele_3(f3, Lambda);
-		//init_global();
+		Modele_3(f3, Lambda);
+		init_global();
 
 		fclose(f1);
 		fclose(f2);	

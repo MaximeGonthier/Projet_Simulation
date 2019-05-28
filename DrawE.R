@@ -7,7 +7,7 @@ attach(data);
 Lambda = V1
 E1 = V2
 E2 = V3
-E3 = V3
+E3 = V4
 
 
 plot(Lambda,E1,xlim=c(0,9), ylim=c(0,16), type="l",xlab="Lambda",ylab="Temps moyen d'attente",col="red")

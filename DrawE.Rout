@@ -28,12 +28,14 @@ Tapez 'q()' pour quitter R.
 > E2 = V3
 > E3 = V4
 > 
+> 
 > plot(Lambda,E1,xlim=c(0,9), ylim=c(0,16), type="l",xlab="Lambda",ylab="Temps moyen d'attente",col="red")
 > lines(Lambda,E2,type="l",col="blue")
 > lines(Lambda,E3,type="l",col="green")
 > legend("topleft",legend=c("E_modele1[A]", "E_modele2[A]", "E_modele3[A]"), col=c("red","blue", "green"),lty=1.1,cex=0.8)
 > 
 > 
+> 
 > proc.time()
 utilisateur     système      écoulé 
-      0.271       0.050       0.317 
+      0.220       0.037       0.272 
