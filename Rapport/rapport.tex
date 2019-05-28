@@ -61,6 +61,12 @@
 	multiplier par 10 toutes les valeurs du temps moyen d'attente pour le modèle 2.\\
 	\centerline{\includegraphics[scale=0.8]{E[A].pdf}}\\
 	On observe que le temps moyen d'attente du modèle 2 augmente significativement à partir de lambda = 6. En effet il passe de moins de 3 à lambda = 6 à plus de 5 à lambda = 8.
+	Cela s'explique par la manière dont se calcule le temps moyen d'attente dans une M/M/1. En effet on fait : \\
+		$E[A] = \rho * \frac{\frac{1}{\mu}}{1-\rho}$\\
+		avec : $\rho = \frac{\lambda}{\mu}$\\
+		Donc plus lambda augmente, plus la valeur de rho est grande est donc plus le temps moyen d'attente est grand.
+		En effet la multiplication par rho augmente plus la valeurs de E[A] que la division car rho > 1 - rho.
+		A condition bien evidemment que ${\mu}$ ne soit pas trop élèvé, ce qui rendrait toute les valeurs de E[A] quasiments similaires à cause du ${\frac{1}{\mu}}$
 	
 	On observe que les modèles 1 et 3 ont des valeurs similaires de temps moyen d'attente. Cela s'explique par la similarité de leurs fonctionnement. En effet le modèle 1
 	il y a une file avec 10 serveurs et dès qu'un serveur est libre on fais un service. Dans le 3 il y a 10 files et les clients vont dans la file la plus vide. Ainsi 

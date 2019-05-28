@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.9.4)  27 MAY 2019 17:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.9.4)  28 MAY 2019 23:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -782,8 +782,7 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
 \c@LT@tables=\count123
 \c@LT@chunks=\count124
 \LT@p@ftn=\toks34
-)
-No file Theorie.aux.
+) (./Theorie.aux)
 \openout1 = `Theorie.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
@@ -800,6 +799,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
 LaTeX Font Info:    ... okay on input line 18.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 18.
+
 (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
@@ -923,84 +923,100 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-No file Theorie.toc.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Theorie.toc
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 3.
+
+(/usr/share/texmf/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10.95> on input line 4.
+)
 \tf@toc=\write3
 \openout3 = `Theorie.toc'.
 
-[2]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 29.
- (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-<MMN.png, id=12, 578.6117pt x 222.68193pt>
+ [2]
+<MMN.png, id=15, 578.6117pt x 222.68193pt>
 File: MMN.png Graphic file (type png)
 <use MMN.png>
-Package pdftex.def Info: MMN.png  used on input line 35. on input line 35.
+Package pdftex.def Info: MMN.png  used on input line 37. on input line 37.
 Package pdftex.def Info: Requested size: 289.30515pt x 111.34068pt on input lin
-e 35.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 38.
+e 37.
 
-Underfull \hbox (badness 10000) in paragraph at lines 36--46
+Underfull \hbox (badness 10000) in paragraph at lines 35--48
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 47--62
+Underfull \hbox (badness 10000) in paragraph at lines 49--64
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 47--62
+Underfull \hbox (badness 10000) in paragraph at lines 49--64
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 47--62
+Underfull \hbox (badness 10000) in paragraph at lines 49--64
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 47--62
+Underfull \hbox (badness 10000) in paragraph at lines 49--64
 
  []
 
 [3 <./MMN.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 63--68
+Underfull \hbox (badness 10000) in paragraph at lines 65--70
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 63--68
+Underfull \hbox (badness 10000) in paragraph at lines 65--70
 
  []
 
-<MM1.png, id=25, 578.6117pt x 158.994pt>
+<MM1.png, id=26, 578.6117pt x 158.994pt>
 File: MM1.png Graphic file (type png)
 <use MM1.png>
-Package pdftex.def Info: MM1.png  used on input line 76. on input line 76.
+Package pdftex.def Info: MM1.png  used on input line 79. on input line 79.
 Package pdftex.def Info: Requested size: 289.30515pt x 79.4968pt on input line 
-76.
-[4 <./MM1.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 93--103
+79.
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 96--106
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--103
+Underfull \hbox (badness 10000) in paragraph at lines 96--106
 
  []
 
-[5] (./Theorie.aux) ) 
+[5 <./MM1.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--123
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--129
+
+ []
+
+[6] (./Theorie.aux) ) 
 Here is how much of TeX's memory you used:
- 6828 strings out of 494829
- 94450 string characters out of 6178001
- 153588 words of memory out of 5000000
- 10002 multiletter control sequences out of 15000+600000
- 46615 words of font info for 46 fonts, out of 8000000 for 9000
+ 6834 strings out of 494829
+ 94526 string characters out of 6178001
+ 154588 words of memory out of 5000000
+ 10003 multiletter control sequences out of 15000+600000
+ 46989 words of font info for 47 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 41i,7n,32p,274b,423s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,7n,32p,357b,423s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/s
 hare/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
 -mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texm
@@ -1015,10 +1031,10 @@ nts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb><
 /usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1
 /public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/s
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Theorie.pdf (5 pages, 237251 bytes).
+Output written on Theorie.pdf (6 pages, 242953 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 67 compressed objects within 1 object stream
+ 97 PDF objects out of 1000 (max. 8388607)
+ 71 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

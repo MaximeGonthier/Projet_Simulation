@@ -27,11 +27,13 @@
 	Ce Rapport à pour but de présenter les trois modèles théoriques étudié pour ce projet de Simulation.\\
 	Il sera composé de trois parties, chacune d'entre elles étant dédié à un modèle précis.
 \section{Modèles n°1 - File M/M/N}
-	\subsection{description du modèle}
+	\subsection{Description du modèle}
 	Le premier modèle est décris de la façon suivante :\\
 	\textit{Le patron donne au client un ticket numéroté.\\
 			Dès qu'un ordinateur se libère, la personne en attente avec le plus petit numéro de ticket accède à l'ordinateur.}
-		\subsubsection{représentation}
+		\subsubsection{Représentation}
+			Ce modèle a donc N ordinateurs qui représentent les serveurs. De plus les temps d'arrivés et de services 
+			suivent une loi exponentielle sans mémoire. Le modèle est donc une M/M/N.\\
 		\centerline{\includegraphics[scale=0.5]{MMN.png}}
 		Modélisation graphique de la file M/M/N.\\
 		Dans l'état i il y à i clients dans la file.\\
@@ -43,8 +45,8 @@
 		\\
 		La condition de convergence pour ce modèle est :\\
 		$\rho > 1$
-	\subsection{Données et Formules}
-	On à besoin pour ce modèles de définir certaines données :\\
+	\subsection{Données et formules}
+	On a besoin pour ce modèles de définir certaines données :\\
 	$\lambda$ : probabilité d'arrivée de client.\\
 	$\mu$ : le temps de service.\\
 	$\rho$ : l'intensité du trafic.\\
@@ -68,11 +70,12 @@
 	
 
 \section{Modèle n°2 - File M/M/1}
-	\subsection{description du modèle}
+	\subsection{Description du modèle}
 	Le deuxième modèle est décris de la façon suivante :\\
 	\textit{Le patron choisit au hasard, uniformément un ordinateur parmis les N puis il donne au client un ticket numéroté pour l'ordinateur choisi.\\
 			Dès que le client d'un ordinateur a fini, c'est le client qui a le plus petit numéro parmis ceux affecté à cet ordinateur qui prend la place.}
-	\subsubsection{représentation}
+	\subsubsection{Représentation}
+		Il y a donc dans ce modèle une seule file représenté par le patron qui donne les tickets. C'est donc une M/M/1.\\
 	\centerline{\includegraphics[scale=0.5]{MM1.png}}
 	Modélisation graphique de la file M/M/1.\\
 	Les transitions peuvent s'exprimer de la façon suivante :\\
@@ -89,7 +92,7 @@
 		$Q_{i, i-1} = \mu$\\
 		La condition de convergence pour ce modèle est :\\
 		$\rho < 1$
-	\subsection{Données et Formules}
+	\subsection{Données et formules}
 	Pour ce modèles, on utilise les même données que pour le modèles précédent soit :\\
 	$\lambda$ : probabilité d'arrivée de client.\\
 	$\mu$ : le temps de service.\\
@@ -108,16 +111,19 @@
 		$max(0,\frac{E[A]}{\rho}ln(10*\rho))$
 		
 
-\section{Modèle n°3 - File M/M/N}
-	\subsection{description du modèle}
+\section{Modèle n°3 - "10 files M/M/1"}
+	\subsection{Description du modèle}
 	Le troisième modèle est décris de la façon suivante :\\
 	\textit{Le patron choisit l'ordinateur avec le moins d'attente puis il donne au client un ticket numéroté pour l'ordinateur choisi.\\
 			Dès que le client d'un ordinateur a fini, c'est le client qui a le plus petit numéro parmi ceux affecté à cet ordinateur qui prend la place.}
-	\subsubsection{représentation}
-	\centerline{\includegraphics[scale=0.5]{Modele3.png}}
+	\subsubsection{Représentation}
+		Dans ce modèle puisque chaque ordinateur a une file d'attente, on peut le représenter sous la forme de 10 M/M/1.\\
+
 	Modélisation graphique.\\
 	
-	\subsection{Données et Formules}
+	\subsection{Données et formules}
 	Pour ce modèle, une fois que la file avec le moins de client en attente à été identifié, le comportement est similaire à une M/M/1. On ne peux cependant pas supposer de valeurs théoriques pour ce modèle puisqu'on ne peut pas savoir sur quelle file va se diriger le client. On a donc pas de valeurs théoriques pour ce modèle.
-	
+	On ne peut pas prévoir le temps moyen d'attente, cependant une fois qu'un client à rejoint une des files, on sait que son temps moyen d'attente à partir de ce moment la sera : \\
+	$E[A] = \rho * \frac{\frac{1}{\mu}}{1-\rho}$
+	\\
 \end{document}
