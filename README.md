@@ -12,6 +12,7 @@ Depuis le dossier Projet_Simulation
 Cela compile et lance l'application. En revanche un seul graphique sera généré en sortie.
 - Pour obtenir le graphique des temps moyen d'attentes : R CMD BATCH "DrawE.R"
 - Pour obtenir le graphique du 90ème percentile : R CMD BATCH "Draw90.R"
+Le script appelle xpdf comme lecteur de pdf, si vous n'avez pas xpdf il faut ecrire à la place votre lecteur de pdf.
 
 ********
 Fichiers
@@ -30,3 +31,4 @@ dans la deuxième le temps moyen d'attente E[A]et dans la dernière le 90ème
 percentile du temps moyen d'attente.
 resultE.txt et result90.txt contiennent respectiveemnt les temps d'attente moyen et les 90ème percentiles
 de chaque modèle. Nous les utilisons pour tracer les graphes.
+t90.pdf et E[A].pdf dans le dossier Rapport sont les graphes.

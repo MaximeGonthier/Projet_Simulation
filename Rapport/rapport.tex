@@ -52,7 +52,28 @@
 	\subsubsection{second modèle}
 		Le second modèle peut être simulé avec une M/M/1. On ajoute une condition aux arrivées de client qui est un pourcentage de chance d'arriver dans la file, comme on a 10 serveurs en theorie, un client arrive dans une file avec une probabilité $\frac{1}{10}$.
 	
-
+\section{Analyse des résultats}
+	Avant tout de chose, notons que pour le modèle 2, les valeurs que nous avons obtenus pour le temps moyen d'attente
+	correspondent à 1/10 des clients d'une M/M/1. Ce qui revient au final à créer 10 M/M/1. Nous avons choisis cette ordre de grandeur
+	plus petit pour pouvoir dessiner les 3 courbes sur le même graphe sans avoir à déformer énormément l'echelle. En effet sinon nous aurions dû 
+	multiplier par 10 toutes les valeurs du temps moyen d'attente pour le modèle 2.\\
+	\centerline{\includegraphics[scale=0.8]{E[A].pdf}}\\
+	On observe que le temps moyen d'attente du modèle 2 augmente significativement à partir de lambda = 6. En effet il passe de moins de 3 à lambda = 6 à plus de 5 à lambda = 8.
+	
+	On observe que les modèles 1 et 3 ont des valeurs similaires de temps moyen d'attente. Cela s'explique par la similarité de leurs fonctionnement. En effet le modèle 1
+	il y a une file avec 10 serveurs et dès qu'un serveur est libre on fais un service. Dans le 3 il y a 10 files et les clients vont dans la file la plus vide. Ainsi 
+	dans les deux cas les clients sont servis dès qu'une place est libéré, que ce soit un serveur ou une file qui se libère. Cela explique bien la ressemblance des deux courbes. 
+	Nous notons aussi que les temps moyen d'attente sont plus faibles pour le modèle 1 et 3 que pour le modèle 2. Cela vient du fait que le patron choisit aléatoirement un ordinateur, cela peut donc 
+	de temps en temps ralentir le service car un client sera mis sur un ordinateur ou il y a déjà des clients qui attendent. Et donc cela augmentera le temps moyen d'attente de manière
+	significative pour un grand nombre de clients.
+	\newpage
+	Le graphique des 90ème percentiles : \\
+	\centerline{\includegraphics[scale=0.8]{t90.pdf}}\\
+	
+	On observe les mêmes résultats que pour le graphique précedent à l'exception de ce sursaut pour le modèle 2 à lambda = 3. 
+	Cela s'explique par une "malchance" qui a fais que plusieurs clients ont été 
+	mis sur des files dont le temps d'attente fût long comme expliqué au dessus, ce qui a donc augmenter le nombre de valeurs extrèmes dans le temps d'attente des clients. Or le 90 ème percentile
+	prend la valeur dont 90\% des valeurs sont inférieures, donc si 10\% des valeurs des temps d'attente sont extrèmes, alors le 90ème percentile le sera aussi.
 
 \section{Explication des résultats théoriques}
 	
