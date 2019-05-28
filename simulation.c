@@ -159,6 +159,7 @@ void Arrivee_Client(event e, int Lambda, int mod){
 	if(mod == 2){
 		double alea = (double)random()/RAND_MAX;	//entre 0 et 1
 		if(alea < 0.1){
+			//if n == 1
 			if(n==1){
 				event e2;
 				e2.type = 1; //service
@@ -220,7 +221,8 @@ void service_event(event e, int mod){
 	if (n > 0){
 		n--;
 		if(mod == 2){
-			if(n > 0){
+			//if n > 0
+			if(n > 1){
 				event e2;
 				e2.type = 1; //service
 				e2.date = e.date + Exponnentielle(Mu);
@@ -325,7 +327,10 @@ void Modele_2(FILE* f1, int Lambda){
 
 	while(condition_arret(OldNmoyen, Nmoyen) == 0){
 		e = extraire();
-		cumule += (e.date-temps)*n;
+		//Ici si on a 1 client ou moins cela veut dire qu'un client est forcément en train d'être servi
+		//donc on ne le compte pas dans les clients en attente dans la file d'attente, d'où le if(n>1)
+		if (n>1) cumule += (n-1)*(e.date-temps);
+		//cumule += (e.date-temps)*n;
 
 		OldNmoyen = Nmoyen;
 		Nmoyen = cumule/temps;
@@ -450,14 +455,14 @@ int main(int argc, char **argv){
 		FILE *f2 = fopen("MODELE2.data","w");
 		FILE *f3 = fopen("MODELE3.data","w");
 		
-		Modele_1(f1, Lambda);
-		init_global();
+		//Modele_1(f1, Lambda);
+		//init_global();
 		
 		Modele_2(f2, Lambda);
 		init_global();
 
-		Modele_3(f3, Lambda);
-		init_global();
+		//Modele_3(f3, Lambda);
+		//init_global();
 
 		fclose(f1);
 		fclose(f2);	
