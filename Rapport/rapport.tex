@@ -37,6 +37,7 @@
 		\item result90.txt
 	\end{itemize}
 	Ces deux fichiers contiennent respectivement les temps d'attente moyen pour chaque modèles en fonction de lambda et les 90 percentile du temps d'attente de chaque modèles, également en fonction de lambda.\\
+	De plus on stocke également dans ces fichier les valeurs théoriques de ces valeurs pour les modèles 1 et 2.\\
 	Ils sont utiliser pour tracer les courbes que l'on pourra observer dans la section \hyperref[Analyse des résultats]{Analyse des résultats}
 	\subsection{structure du programme}
 	Nous avons choisit pour la programmation de gérés les différents modèles dans les fonctions $Arrivee\_Client$ et $service\_event$. Ces deux fonctions on 3 modes de fonctionnement
@@ -87,7 +88,7 @@
 	prend la valeur dont 90\% des valeurs sont inférieures, donc si 10\% des valeurs des temps d'attente sont extrêmes, alors le $90_{ème}$ percentile le sera aussi.
 
 \section{Explication des résultats théoriques}
-	Les résultats théoriques que nous avons obtenu concernes uniquement les moyennes et les 90 percentiles des modèles 1 et 2.
+	Les résultats théoriques que nous avons obtenu concernes uniquement les moyennes et les 90 percentiles des modèles 1 et 2.\\
 	\subsection{moyennes théoriques}
 	On constate en analysant les courbes théorique pour les temps d'attente des modèle 1 et 2 (\hyperref[fig1]{graphe 1}) que le modèle 1 est plus performant. En ce qui concerne le premier modèle la courbe est quasiment constante jusqu'a $lambda = 8$ ou elle commence à croître légèrement, le temps d'attente restant faibles.
 	Pour le second modèle on constante que la courbe croît plus vite que celle du premier et dans ce graph vient a dépasser les valeurs pratiques obtenu lors de la simulation.
