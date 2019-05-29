@@ -60,6 +60,7 @@
 	correspondent à 1/10 des clients d'une M/M/1. Ce qui revient au final à créer 10 M/M/1. Nous avons choisis cette ordre de grandeur
 	plus petit pour pouvoir dessiner les 3 courbes sur le même graphe sans avoir à déformer énormément l'echelle. En effet sinon nous aurions dû 
 	multiplier par 10 toutes les valeurs du temps moyen d'attente pour le modèle 2.\\
+	\label{fig1}
 	\centerline{\includegraphics[scale=0.8]{E[A].pdf}}\\
 	On observe que le temps moyen d'attente du modèle 2 augmente significativement à partir de lambda = 6. En effet il passe de moins de 3 à lambda = 6 à plus de 5 à lambda = 8.
 	Cela s'explique par la manière dont se calcule le temps moyen d'attente dans une M/M/1. En effet on fait : \\
@@ -77,6 +78,7 @@
 	significative pour un grand nombre de clients.
 	\newpage
 	Le graphique des $90_{ème}$ percentiles : \\
+	\label{fig2}
 	\centerline{\includegraphics[scale=0.8]{t90.pdf}}\\
 	
 	On observe les mêmes résultats que pour le graphique précedent à l'exception de ce sursaut pour le modèle 2 à lambda = 3. 
@@ -85,6 +87,13 @@
 	prend la valeur dont 90\% des valeurs sont inférieures, donc si 10\% des valeurs des temps d'attente sont extrêmes, alors le $90_{ème}$ percentile le sera aussi.
 
 \section{Explication des résultats théoriques}
+	Les résultats théoriques que nous avons obtenu concernes uniquement les moyennes et les 90 percentiles des modèles 1 et 2.
+	\subsection{moyennes théoriques}
+	On constate en analysant les courbes théorique pour les temps d'attente des modèle 1 et 2 (\hyperref[fig1]{graphe 1}) que le modèle 1 est plus performant. En ce qui concerne le premier modèle la courbe est quasiment constante jusqu'a $lambda = 8$ ou elle commence à croître légèrement, le temps d'attente restant faibles.
+	Pour le second modèle on constante que la courbe croît plus vite que celle du premier et dans ce graph vient a dépasser les valeurs pratiques obtenu lors de la simulation.
+	\subsection{90 percentiles theoriques}
+	On constate en analysant les courbes théorique pour les 90 percentile du temps d'attente des modèle 1 et 2 (\hyperref[fig2]{graphe 2}) que les courbes théoriques ont le même comportement que celles des moyenne du temps d'attente.
+	Ainsi on peut voir que le modèle 1 reste le meilleur en théorie sur cette valeur.
 	
 \section{Conclusion}
 	Après l'analyse des résultats obtenue par simulation des différents modèles, on peut conclure que les modèles les plus intéressants pour le patron du cyber café sont les modèles 1 et 3. Le modèle 1 étant le plus facile à mettre en place puisqu'il ne nécessite qu'une file pour fonctionner.

@@ -199,6 +199,40 @@ double Moyenne_theorique2(int lambda){
 	return moy*10;
 }
 /**
+ * calcul du 90 percentile du temps d'attente theorique d'une M/M/N
+ */
+double percentile_theorique1(int moy, int lambda){
+	double rho = (double)lambda/(10*Mu);
+	double SumN, nomSumN, denumSumN;
+	for(int i = 1; i < 10; i ++){
+		nomSumN = (double)pow(10*rho,i);
+		denumSumN = factorielle(i);
+		SumN += (double)nomSumN/denumSumN;
+	}
+	double p0, nump0, denump0;
+	nump0 = (double)pow(10*rho,10);
+	denump0 = (double)factorielle(10) * (1 - rho);
+	p0 = 1 + ((double)nump0/denump0) + SumN;
+	p0 = (double)pow(p0,-1);
+
+	double ProbaQ, nomProbaQ, denumProbaQ;
+	nomProbaQ = nump0;
+	denumProbaQ = denump0;
+	ProbaQ = ((double)nomProbaQ/denumProbaQ) * p0;
+
+	double perc = ((double)moy/ProbaQ)*log(10*ProbaQ);
+	return perc;
+}
+
+/**
+ * calcul du 90 percentile du temps d'attente theorique d'une M/M/1
+ */
+double percentile_theorique2(int moy, int lambda){
+	double rho = (double)lambda/10;
+	return (double)fmax(0,((double)moy/rho)*log(10*rho));
+}
+
+/**
  * calcul du 90 percentile du temps d'attente par simulation
  */
 double* Percentile (double Tmoyen, double* Tabtemps){
@@ -511,12 +545,14 @@ void Modele_3(int Lambda){
 	//Ecriture de la moyenne et du 90percentile dans un fichier communs aux trois simulations pour le tracage des courbes
 	double m1 = Moyenne_theorique1(Lambda);
 	double m2 = Moyenne_theorique2(Lambda);
+	double p1 = percentile_theorique1(m1, Lambda);
+	double p2 = percentile_theorique2(m2, Lambda);
 	FILE *resultE = fopen("resultE.txt","a");
 	fprintf(resultE," \t %f \t %f \t %f\n",Moy, m1, m2);
 	fclose(resultE);
 
 	FILE *result90 = fopen("result90.txt","a");
-	fprintf(result90," \t %f\n",Tabpercentile3[8]);
+	fprintf(result90," \t %f \t %f \t %f\n",Tabpercentile3[8],p1, p2);
 	fclose(result90);
 
 	fclose(fresult3);
