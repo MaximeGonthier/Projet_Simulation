@@ -150,6 +150,54 @@ double Moyenne(int serveur, event e){
 	return Tmoyen;
 }
 
+int factorielle(int n){
+	int resultat;
+    if(n<=0)
+     return 1;
+    else{
+     for(resultat =1; n > 1; n--)
+        resultat *= n;
+    }
+   return resultat;
+}
+
+/**
+ * Calcul du temps moyen d'attente pour une M/M/N
+ */
+double Moyenne_theorique1(int lambda){
+	double rho = (double)lambda/(10*Mu);
+	double SumN, nomSumN, denumSumN;
+	for(int i = 1; i < 10; i ++){
+		nomSumN = (double)pow(10*rho,i);
+		denumSumN = factorielle(i);
+		SumN += (double)nomSumN/denumSumN;
+	}
+	double p0, nump0, denump0;
+	nump0 = (double)pow(10*rho,10);
+	denump0 = (double)factorielle(10) * (1 - rho);
+	p0 = 1 + ((double)nump0/denump0) + SumN;
+	p0 = (double)pow(p0,-1);
+
+	double ProbaQ, nomProbaQ, denumProbaQ;
+	nomProbaQ = nump0;
+	denumProbaQ = denump0;
+	ProbaQ = ((double)nomProbaQ/denumProbaQ) * p0;
+
+	double moy = (double)ProbaQ/(10*Mu*(1 -rho));
+	return moy;
+}
+
+/**
+ * Calcul du temps moyen d'attente pour une M/M/1
+ * On multiplie le resultat par 10 pour pouvoir comparer avec notre second modèle
+ */
+double Moyenne_theorique2(int lambda){
+	double rho = (double)lambda/10;
+	double nom = (double)1/10;
+	double denom = (1-rho);
+	double moy = (double)rho*(double)nom/denom;
+	return moy*10;
+}
 /**
  * calcul du 90 percentile du temps d'attente par simulation
  */
@@ -269,7 +317,7 @@ void service_event(event e, int mod){
 		 * service du modèle 1
 		 */
 		if(mod == 1){
-			if(n >= N){//si le nombre de client est inferieur au nombre de serveur, on lance un service
+			if(n >= N){//si le nombre de client est superieur au nombre de serveur, on lance un service
 				event e2;
 				e2.type = 1; //service
 				e2.date = e.date + Exponnentielle(Mu);
@@ -314,7 +362,7 @@ void service_event(event e, int mod){
 /**
  * Modele 1
  */
-void Modele_1(FILE* f1, int Lambda){
+void Modele_1(int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -335,13 +383,6 @@ void Modele_1(FILE* f1, int Lambda){
 		OldNmoyen = Nmoyen;
 		Nmoyen = cumule/temps;
 
-		if(temps == 0){
-			fprintf(f1,"0 \t 0 \n");
-		}
-		else{
-			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
-		}
-
 		if(e.type == 0){
 			Arrivee_Client(e,Lambda,1);
 		}
@@ -353,7 +394,7 @@ void Modele_1(FILE* f1, int Lambda){
 	}	
 
 	//Ecriture des résultats dans un fichier
-	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile[8]);
+	//printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile[8]);
 	FILE *fresult1 = fopen("Result_modele1.txt","a");
 	fprintf(fresult1,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile[8]);
 
@@ -373,7 +414,7 @@ void Modele_1(FILE* f1, int Lambda){
 /**
  * Modele 2
  */
-void Modele_2(FILE* f1, int Lambda){
+void Modele_2(int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -396,13 +437,6 @@ void Modele_2(FILE* f1, int Lambda){
 		OldNmoyen = Nmoyen;
 		Nmoyen = cumule/temps;
 		
-		
-		if(temps == 0){
-			fprintf(f1,"0 \t 0 \n");
-		}
-		else{
-			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
-		}
 
 		if(e.type == 0){
 			Arrivee_Client(e,Lambda,2);
@@ -415,7 +449,7 @@ void Modele_2(FILE* f1, int Lambda){
 	}	
 
 	//Ecriture des résultats dans un fichier
-	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile2[8]);
+	//printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile2[8]);
 	FILE *fresult2 = fopen("Result_modele2.txt","a");
 	fprintf(fresult2,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile2[8]);
 
@@ -437,7 +471,7 @@ void Modele_2(FILE* f1, int Lambda){
 /**
  * Modele 3
  */
-void Modele_3(FILE* f1, int Lambda){
+void Modele_3(int Lambda){
 	long double OldNmoyen;
 	long double Nmoyen;
 	Init_Ech();
@@ -459,13 +493,6 @@ void Modele_3(FILE* f1, int Lambda){
 		Nmoyen = cumule/temps;
 	
 
-		if(temps == 0){
-			fprintf(f1,"0 \t 0 \n");
-		}
-		else{
-			fprintf(f1,"%f \t %Lf \n",temps,Nmoyen);
-		}
-
 		if(e.type == 0){
 			Arrivee_Client(e,Lambda,3);
 		}
@@ -477,13 +504,15 @@ void Modele_3(FILE* f1, int Lambda){
 	}	
 
 	//Ecriture des résultats dans un fichier
-	printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile3[8]);
+	//printf("Lambda : %d N moyen : %Lf  T moyen  : %f 90 percentile : %f\n",Lambda, Nmoyen, Moy,Tabpercentile3[8]);
 	FILE *fresult3 = fopen("Result_modele3.txt","a");
 	fprintf(fresult3,"%d \t %f \t %f \n",Lambda,Moy,Tabpercentile3[8]);
 
 	//Ecriture de la moyenne et du 90percentile dans un fichier communs aux trois simulations pour le tracage des courbes
+	double m1 = Moyenne_theorique1(Lambda);
+	double m2 = Moyenne_theorique2(Lambda);
 	FILE *resultE = fopen("resultE.txt","a");
-	fprintf(resultE," \t %f\n",Moy);
+	fprintf(resultE," \t %f \t %f \t %f\n",Moy, m1, m2);
 	fclose(resultE);
 
 	FILE *result90 = fopen("result90.txt","a");
@@ -525,22 +554,15 @@ int main(int argc, char **argv){
 	for(int i = 0; i < 9; i++)
 	{
 		fscanf(f,"%d",&Lambda);
-		FILE *f1 = fopen("MODELE1.data","w");
-		FILE *f2 = fopen("MODELE2.data","w");
-		FILE *f3 = fopen("MODELE3.data","w");
 		
-		Modele_1(f1, Lambda);
+		Modele_1(Lambda);
 		init_global();
 		
-		Modele_2(f2, Lambda);
+		Modele_2(Lambda);
 		init_global();
 
-		Modele_3(f3, Lambda);
+		Modele_3(Lambda);
 		init_global();
-
-		fclose(f1);
-		fclose(f2);	
-		fclose(f3);
 	}
 	fclose(f);
 
