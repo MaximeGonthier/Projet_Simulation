@@ -46,6 +46,7 @@
 		\item un fichier dans lequel écrire les données relatives a la simulation.
 		\item la valeur de lambda en train d'être testée.
 	\end{itemize}
+	Détails en \hyperref[annexe]{annexe}
 	\subsubsection{premier modèle}
 		le premier modèle représente une M/M/N classique. on traite donc les clients dès qu'un serveur est libre.
 	\subsubsection{second modèle}
@@ -87,4 +88,111 @@
 	
 \section{Conclusion}
 	Après l'analyse des résultats obtenue par simulation des différents modèles, on peut conclure que les modèles les plus intéressants pour le patron du cyber café sont les modèles 1 et 3. Le modèle 1 étant le plus facile à mettre en place puisqu'il ne nécessite qu'une file pour fonctionner.
+	
+\section{annexe}
+\label{annexe}
+	\subsection{modèle 1}
+		\subsubsection{Arrivee Client}
+	\begin{lstlisting}
+n++; 
+Nentree ++; 
+if(n<=N){
+	event e2;
+	e2.type = 1; //service
+	e2.date = e.date + Exponnentielle(Mu);
+	e2.etat = 0; //non traite
+	Ajouter_Ech(e2);
+}
+temps = e.date;
+	\end{lstlisting}
+		\subsubsection{Service event}
+	\begin{lstlisting}
+if (n > 0){
+	n--;
+
+	if(n >= N){
+		event e2;
+		e2.type = 1; //service
+		e2.date = e.date + Exponnentielle(Mu);
+		e2.etat = 0;
+		e2.file = -1;
+		Ajouter_Ech(e2);
+	}
+}
+	\end{lstlisting}
+	\subsection{modèle2}
+		\subsubsection{Arrivee Client}
+			\begin{lstlisting}
+double alea = (double)random()/RAND_MAX;//entre 0 et 1
+if(alea < 0.1){//represente la proba que le client entre dans la file
+	if(n==1){
+		event e2;
+		e2.type = 1; //service
+		e2.date = e.date + Exponnentielle(Mu);
+		e2.etat = 0; //non traite
+		Ajouter_Ech(e2);
+	}
+	n++;
+	Nentree ++;
+}
+temps = e.date;
+			\end{lstlisting}
+		\subsubsection{Service event}
+			\begin{lstlisting}
+if (n > 0){
+	n--;
+	if(n > 1){
+		event e2;
+		e2.type = 1; //service
+		e2.date = e.date + Exponnentielle(Mu);
+		e2.etat = 0;
+		e2.file = -1;
+		Ajouter_Ech(e2);
+	}
+}
+			\end{lstlisting}
+	\subsection{modèle3}
+		\subsubsection{Arrivee Client}
+			\begin{lstlisting}
+int min = 0;
+min = Tabmodele3[0];
+int indicemin = 0;
+//choix de la file avec le plus petit nombre de clients
+for (int i = 0; i < 10; i++)
+{
+	if(min > Tabmodele3[i])
+	{
+		min = Tabmodele3[i];
+		indicemin = i;
+	}
+}
+Tabmodele3[indicemin]+=1;//ajout d'un client dans cette file
+if(Tabmodele3[indicemin]==1){
+	event e2;
+	e2.type = 1; //service
+	e2.date = e.date + Exponnentielle(Mu);
+	e2.etat = 0; //non traite
+	e2.file = indicemin;//file devant traiter le service
+	Ajouter_Ech(e2);
+}
+n++;
+Nentree ++;
+temps = e.date;
+			\end{lstlisting}
+		\subsubsection{Service event}
+			\begin{lstlisting}
+if (n > 0){
+	n--;
+	Tabmodele3[e.file] --;//-1 client de la file concernee 
+	if(Tabmodele3[e.file] > 0){
+		event e2;
+		e2.type = 1; //service
+		e2.date = e.date + Exponnentielle(Mu);
+		e2.etat = 0;
+		e2.file = e.file;
+		Ajouter_Ech(e2);
+	}
+}
+temps = e.date;
+			\end{lstlisting}
 \end{document}
